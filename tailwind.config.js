@@ -1,5 +1,24 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  safelist: [
+    "bg-1001",
+    "bg-1002",
+    "bg-1003",
+    "bg-1004",
+    "bg-1005",
+    "bg-1006",
+    "bg-1007",
+    "bg-1008",
+    "bg-1009",
+    "bg-1063",
+    "bg-1065",
+    "bg-1067",
+    "bg-1075",
+    "bg-1077",
+    "bg-1081",
+    "bg-1092",
+    "bg-1093",
+  ],
   darkMode: ["class"],
   content: [
     "./pages/**/*.{ts,tsx}",
