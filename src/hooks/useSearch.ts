@@ -1,9 +1,6 @@
 import axios from "axios";
-import { useState } from "react";
 
 const useSearch = () => {
-  const [searchResult, setSearchResult] = useState("");
-
   const searchSubway = async (searchWord: string) => {
     const response = await axios.get(
       `http://swopenAPI.seoul.go.kr/api/subway/${
@@ -11,10 +8,10 @@ const useSearch = () => {
       }/json/realtimeStationArrival/0/5/${searchWord}`
     );
 
-    setSearchResult(response.data);
+    return response.data;
   };
 
-  return { searchResult, searchSubway };
+  return { searchSubway };
 };
 
 export default useSearch;

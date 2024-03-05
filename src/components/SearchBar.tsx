@@ -5,7 +5,7 @@ import { Input } from "./ui/input";
 
 const SearchBar = () => {
   const [searchWord, setSearchWord] = useState("");
-  const { searchResult, searchSubway } = useSearch();
+  const { searchSubway } = useSearch();
 
   const inputOnChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchWord(e.target.value);
@@ -16,8 +16,8 @@ const SearchBar = () => {
       alert("검색어를 입력하세요");
       setSearchWord("");
     }
-    await searchSubway(searchWord);
-    console.log("result", searchResult);
+    const result = await searchSubway(searchWord);
+    console.log("result", result);
   };
   return (
     <div id="search-bar" className="flex min-w-[680px] m-auto gap-2">
