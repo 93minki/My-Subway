@@ -1,10 +1,6 @@
+import useSearchResultStore from "@/stores/searchResult";
 import info from "../subway_info.json";
-
-interface SubwayStateProps {
-  subwayId: string; // 호선 1007 -> 7호선 1006 -> 6호선 ,, 다른것도 있음.
-  statnFid: string; // 이전 지하철역 ID
-  statnTid: string; // 다음 지하철역 ID
-}
+import type { realTimeArrivalListType } from "../types/ResponseType";
 
 interface SubwayInfoType {
   [key: string]: {
@@ -17,35 +13,74 @@ interface SubwayInfoType {
 }
 const subwayInfo: SubwayInfoType = info;
 
-const SubwayState = ({
-  subwayId = "1007",
-  statnFid = "1007000738",
-  statnTid = "1007000736",
-}: SubwayStateProps) => {
-  const colorCode = subwayInfo[subwayId].color;
-  console.log("colorCode", colorCode);
-  const prevStation = subwayInfo[subwayId].station[statnFid];
-  const nextStation = subwayInfo[subwayId].station[statnTid];
+const SubwayState = () => {
+  const searchResult = useSearchResultStore((state) => state.searchResult);
+  if (searchResult.realtimeArrivalList.length <= 0) {
+    return <div>데이터가 업슴다.</div>;
+  }
 
-  console.log("이전역", prevStation);
-  console.log("다음역", nextStation);
+  const subwayId = searchResult.realtimeArrivalList[0].subwayId;
+  const colorCode = subwayInfo[subwayId].color;
+  // 1개 이상의 데이터가 넘어오는데, 현재 역은 모두 공통이다. 상행, 하행 구분도 해야 함
+
+  const { upLine, downLine } = searchResult.realtimeArrivalList.reduce<{
+    upLine: realTimeArrivalListType[];
+    downLine: realTimeArrivalListType[];
+  }>(
+    (acc, result) => {
+      if (result.updnLine === "상행") {
+        acc.upLine.push(result);
+      } else {
+        acc.downLine.push(result);
+      }
+      return acc;
+    },
+    { upLine: [], downLine: [] }
+  );
+  console.log("상행", upLine);
+  console.log("하행", downLine);
 
   return (
-    <div className="flex min-w-[680px] m-auto justify-center items-center">
+    <div className="flex flex-col gap-16">
       <div
-        className={`bg-${subwayId} w-[100px] h-12 flex justify-center items-center`}
+        id="upline"
+        className="flex min-w-[680px] m-auto justify-center items-center"
       >
-        prev
+        <div
+          className={`bg-${colorCode} w-[100px] h-12 flex justify-center items-center`}
+        >
+          prev
+        </div>
+        <div
+          className={`border w-[200px] h-[200px] rounded-[50%] flex justify-center items-center bg-${colorCode} `}
+        >
+          current
+        </div>
+        <div
+          className={`bg-${colorCode} w-[100px] h-12 flex justify-center items-center `}
+        >
+          next
+        </div>
       </div>
       <div
-        className={`border w-[200px] h-[200px] rounded-[50%] flex justify-center items-center bg-${subwayId} `}
+        id="downline"
+        className="flex min-w-[680px] m-auto justify-center items-center"
       >
-        current
-      </div>
-      <div
-        className={`bg-${subwayId} w-[100px] h-12 flex justify-center items-center `}
-      >
-        next
+        <div
+          className={`bg-${colorCode} w-[100px] h-12 flex justify-center items-center`}
+        >
+          prev
+        </div>
+        <div
+          className={`border w-[200px] h-[200px] rounded-[50%] flex justify-center items-center bg-${colorCode} `}
+        >
+          current
+        </div>
+        <div
+          className={`bg-${colorCode} w-[100px] h-12 flex justify-center items-center `}
+        >
+          next
+        </div>
       </div>
     </div>
   );
