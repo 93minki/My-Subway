@@ -7,11 +7,11 @@ interface CommonLayoutProps {
 
 const CommonLayout = ({ children }: CommonLayoutProps) => {
   return (
-    <>
+    <div id="common-layout" className="flex flex-col gap-4 h-full">
       <Header />
       {children}
       <Footer />
-    </>
+    </div>
   );
 };
 
