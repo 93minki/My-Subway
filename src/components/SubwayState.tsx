@@ -15,16 +15,13 @@ const subwayInfo: SubwayInfoType = info;
 
 const SubwayState = () => {
   const searchResult = useSearchResultStore((state) => state.searchResult);
-  // 이수역에서 에러 발생, 여러 호선이 동시에 존재하는 경우 뭔가 다른가? 총신대입구(이수) 이렇게 나와서 에러가 나오네...
-  // 검색결과가 없을 경우도 필터링 해야함.
-  console.log("searchResult", searchResult);
+
   if (
     ("status" in searchResult &&
       (searchResult.status < 200 || searchResult.status >= 300)) ||
     !("realtimeArrivalList" in searchResult) ||
     searchResult.realtimeArrivalList.length <= 0
   ) {
-    // 에러 메시지가 있는 경우 또는 realtimeArrivalList가 없거나 비어 있는 경우
     const errorMessage =
       "status" in searchResult ? searchResult.message : "데이터가 업슴다.";
     return <div>{errorMessage}</div>;
@@ -33,7 +30,6 @@ const SubwayState = () => {
   const subwayId = searchResult.realtimeArrivalList[0].subwayId;
   const stationName = searchResult.realtimeArrivalList[0].statnNm;
   const hosun = subwayInfo[subwayId];
-  // 1개 이상의 데이터가 넘어오는데, 현재 역은 모두 공통이다. 상행, 하행 구분도 해야 함
 
   const { upLine, downLine } = searchResult.realtimeArrivalList.reduce<{
     upLine: realTimeArrivalListType[];
@@ -49,11 +45,10 @@ const SubwayState = () => {
     },
     { upLine: [], downLine: [] }
   );
-  console.log("상행", upLine);
-  console.log("하행", downLine);
 
   return (
     <div className="flex flex-col gap-16">
+      <span>상행</span>
       <div
         id="upline"
         className="flex min-w-[680px] m-auto justify-center items-center"
@@ -74,6 +69,7 @@ const SubwayState = () => {
           {hosun.station[upLine[0].statnTid]}
         </div>
       </div>
+      <span>하행</span>
       <div
         id="downline"
         className="flex min-w-[680px] m-auto justify-center items-center"
