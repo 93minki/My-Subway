@@ -27,6 +27,27 @@ const SubwayState = () => {
     return <div>{errorMessage}</div>;
   }
 
+  // NOTE 환승 역 갯수
+  const transferCount = searchResult.realtimeArrivalList[0].trnsitCo;
+  console.log("transferCount", transferCount);
+  // NOTE 환승 역 ID List
+  const subwayIdListString = searchResult.realtimeArrivalList[0].subwayList;
+  const subwayIdList = subwayIdListString.split(",");
+  console.log("subwayIdList", subwayIdList);
+
+  const subwayObject = subwayIdList.reduce<{
+    [key: string]: realTimeArrivalListType[];
+  }>((acc, cur) => {
+    acc[cur] = []; // 어차피 들어올거니까 타입 단언으로 막아버림
+    return acc;
+  }, {});
+
+  searchResult.realtimeArrivalList.forEach((list) => {
+    subwayObject[list.subwayId].push(list);
+  });
+
+  console.log("subwayObject", subwayObject);
+
   const subwayId = searchResult.realtimeArrivalList[0].subwayId;
   const stationName = searchResult.realtimeArrivalList[0].statnNm;
   const hosun = subwayInfo[subwayId];
