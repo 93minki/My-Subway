@@ -10,7 +10,7 @@ const useSearch = () => {
     const response = await axios.get(
       `http://swopenAPI.seoul.go.kr/api/subway/${
         import.meta.env.VITE_API_KEY
-      }/json/realtimeStationArrival/0/5/${searchWord}`
+      }/json/realtimeStationArrival/0/100/${searchWord}`
     );
     setSearchResult(response.data);
   };
