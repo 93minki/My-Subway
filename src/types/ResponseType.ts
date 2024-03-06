@@ -7,7 +7,7 @@ export interface statusMessage {
   total: number;
 }
 
-export interface realTimeArrivalList {
+export interface realTimeArrivalListType {
   subwayId: string;
   updnLine: string;
   trainLineNm: string;
@@ -39,4 +39,3 @@ export interface realTimeArrivalList {
   totalCount?: number;
   trainCo?: string;
 }
-[];

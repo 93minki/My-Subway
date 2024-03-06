@@ -1,8 +1,10 @@
+import useSearchResultStore from "@/stores/searchResult";
 import axios from "axios";
-import { useState } from "react";
 
 const useSearch = () => {
-  const [searchResult, setSearchResult] = useState("");
+  const setSearchResult = useSearchResultStore(
+    (state) => state.setSearchResult
+  );
 
   const searchSubway = async (searchWord: string) => {
     const response = await axios.get(
@@ -10,11 +12,10 @@ const useSearch = () => {
         import.meta.env.VITE_API_KEY
       }/json/realtimeStationArrival/0/5/${searchWord}`
     );
-
     setSearchResult(response.data);
   };
 
-  return { searchResult, searchSubway };
+  return { searchSubway };
 };
 
 export default useSearch;
