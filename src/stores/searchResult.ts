@@ -1,12 +1,12 @@
 import { realTimeArrivalListType, statusMessage } from "@/types/ResponseType";
 import { create } from "zustand";
 
-interface SearchResultType {
+export interface SearchResultType {
   errorMessage: statusMessage;
   realtimeArrivalList: realTimeArrivalListType[];
 }
 
-interface SearchResultState {
+export interface SearchResultState {
   searchResult: SearchResultType | statusMessage;
   setSearchResult: (result: SearchResultType | statusMessage) => void;
 }
