@@ -20,7 +20,7 @@ const SearchBar = () => {
     await searchSubway(searchWord);
   };
   return (
-    <div id="search-bar" className="flex min-w-[680px] m-auto gap-2">
+    <div id="search-bar" className="flex max-w-[390px] w-full m-auto gap-2">
       <Input
         type="text"
         placeholder="write subway name"
