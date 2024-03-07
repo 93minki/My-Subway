@@ -57,7 +57,7 @@ const SubwayState = () => {
   return isError ? (
     <div>{errMsg}</div>
   ) : (
-    <Tabs defaultValue={currentTab}>
+    <Tabs defaultValue={currentTab} className="border flex flex-col">
       <TabsList>
         {Object.keys(subwayObject).map((list) => {
           return (
