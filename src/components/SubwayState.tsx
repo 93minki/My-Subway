@@ -1,6 +1,7 @@
 import useSearchResultStore from "@/stores/searchResult";
 import type { realTimeArrivalListType } from "../types/ResponseType";
 import LineState from "./LineState";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 
 const SubwayState = () => {
   const searchResult = useSearchResultStore((state) => state.searchResult);
@@ -22,7 +23,7 @@ const SubwayState = () => {
   const subwayObject = subwayIdList.reduce<{
     [key: string]: realTimeArrivalListType[];
   }>((acc, cur) => {
-    acc[cur] = []; // 어차피 들어올거니까 타입 단언으로 막아버림
+    acc[cur] = [];
     return acc;
   }, {});
 
@@ -32,12 +33,22 @@ const SubwayState = () => {
 
   console.log("subwayObject", subwayObject);
 
+  // TODO 여기서 Tabs으로 구분해야 할 듯??
+  // TabList가 될 것 들은 subwayIdList를 사용해서 만들어야 할 것 같음
+
   return (
-    <div className="flex flex-col gap-16">
+    <Tabs defaultValue={subwayIdList[0]}>
+      <TabsList>
+        {subwayIdList.map((list) => (
+          <TabsTrigger value={list}>{list}</TabsTrigger>
+        ))}
+      </TabsList>
       {subwayIdList.map((list) => (
-        <LineState key={list} lineList={subwayObject[list]} />
+        <TabsContent value={list}>
+          <LineState lineList={subwayObject[list]} />
+        </TabsContent>
       ))}
-    </div>
+    </Tabs>
   );
 };
 
