@@ -38,8 +38,10 @@ const LineState = ({ lineList }: LineStateProps) => {
     { upLine: [], downLine: [] }
   );
 
+  const upText = upLine[0].updnLine;
   const up_prevStation = subwayJson.station[upLine[0].statnFid];
   const up_nextStation = subwayJson.station[upLine[0].statnTid];
+  const downText = downLine[0].updnLine;
   const down_prevStation = subwayJson.station[downLine[0].statnFid];
   const down_nextStation = subwayJson.station[downLine[0].statnTid];
 
@@ -64,7 +66,7 @@ const LineState = ({ lineList }: LineStateProps) => {
         id="upline"
         className="flex flex-col min-w-[680px] m-auto justify-center items-center"
       >
-        <span>상행</span>
+        <span>{upText}</span>
         <div className="flex justify-center items-center">
           <div
             className={`bg-${subwayId} w-[100px] h-12 flex justify-center items-center`}
@@ -93,7 +95,7 @@ const LineState = ({ lineList }: LineStateProps) => {
         id="downline"
         className="flex flex-col min-w-[680px] m-auto justify-center items-center"
       >
-        <span>하행</span>
+        <span>{downText}</span>
         <div className="flex justify-center items-center">
           <div
             className={`bg-${subwayId} w-[100px] h-12 flex justify-center items-center`}
