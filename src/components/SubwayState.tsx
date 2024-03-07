@@ -26,9 +26,9 @@ const SubwayState = () => {
   const [subwayObject, setSubwayObject] = useState<{
     [key: string]: realTimeArrivalListType[];
   }>({});
+  const [currentTab, setCurrentTab] = useState("");
 
   useEffect(() => {
-    console.log("searchResult 변경됨", searchResult);
     if (
       ("status" in searchResult &&
         (searchResult.status < 200 || searchResult.status >= 300)) ||
@@ -48,7 +48,7 @@ const SubwayState = () => {
         acc[list.subwayId].push(list);
         return acc;
       }, {});
-      console.log("object", object);
+      setCurrentTab(Object.keys(object)[0]);
       setIsError(false);
       setSubwayObject(object);
     }
@@ -57,11 +57,9 @@ const SubwayState = () => {
   return isError ? (
     <div>{errMsg}</div>
   ) : (
-    <Tabs defaultValue={Object.keys(subwayObject)[0]}>
+    <Tabs defaultValue={currentTab}>
       <TabsList>
         {Object.keys(subwayObject).map((list) => {
-          console.log("list", list);
-          console.log("defaultValue", Object.keys(subwayObject)[0]);
           return (
             <TabsTrigger key={Math.random()} value={list}>
               {subwayInfo[list].name}
