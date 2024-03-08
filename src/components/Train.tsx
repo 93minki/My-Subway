@@ -18,7 +18,7 @@ const Train = ({ trainInfo }: TrainProps) => {
   const { subwayId } = trainInfo;
   return (
     <div
-      className={`flex flex-col gap-4 border border-${subwayId} border-opacity-25 w-[150px] w-20 border shadow-lg p-2`}
+      className={`flex flex-col gap-4 border border-${subwayId} border-opacity-25 w-[300px] border shadow-lg p-2 rounded-md`}
     >
       <span>{trainInfo.trainLineNm}</span>
       <span>도착 메세지: {trainInfo.arvlMsg3}</span>
