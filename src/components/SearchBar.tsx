@@ -12,6 +12,7 @@ const SearchBar = () => {
   };
 
   const buttonOnClickHandler = async () => {
+    console.log("검색 버튼 클릭");
     if (searchWord.trim().length < 1) {
       alert("검색어를 입력하세요");
       setSearchWord("");
