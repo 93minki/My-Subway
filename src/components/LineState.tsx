@@ -1,7 +1,7 @@
 import { realTimeArrivalListType } from "@/types/ResponseType";
+import { TbTrain } from "react-icons/tb";
 import info from "../subway_info.json";
 import Train from "./Train";
-
 interface LineStateProps {
   lineList: realTimeArrivalListType[];
 }
@@ -108,10 +108,11 @@ const LineState = ({ lineList }: LineStateProps) => {
           </div>
         </div>
 
-        <div className="w-full flex justify-between relative">
+        <div className="w-full flex justify-between relative mt-10">
           <div className={`border-b-2 w-full absolute border-${subwayId}`} />
           {nextStation.map((station) => (
             <div className="relative p-2 w-1/4 flex justify-center">
+              <TbTrain className="absolute top-[-20px] left-[37px]" />
               <div
                 className={`border border-${subwayId} bg-white rounded-lg w-[8px] h-[8px] absolute right-1/2 top-[-3px]`}
               />
@@ -119,13 +120,13 @@ const LineState = ({ lineList }: LineStateProps) => {
             </div>
           ))}
         </div>
+
         <div className="flex justify-center items-start gap-4">
           {sortedUpLine.map((line) => {
             return <Train key={Math.random()} trainInfo={line} />;
           })}
         </div>
       </div>
-
       <div
         id="downline"
         className="flex flex-col max-w-[390px] w-full m-auto justify-center items-center gap-4"
@@ -148,14 +149,15 @@ const LineState = ({ lineList }: LineStateProps) => {
             {down_nextStation}
           </div>
         </div>
-
-        <div className="w-full flex justify-between relative">
+        <div className="w-full flex justify-between relative mt-10">
           <div className={`border-b-2 w-full absolute border-${subwayId}`} />
           {prevStation.map((station) => (
             <div className="relative p-2 flex justify-center">
               <div
                 className={`border border-${subwayId} bg-white rounded-lg w-[8px] h-[8px] absolute right-1/2 top-[-3px]`}
-              />
+              >
+                <TbTrain className="absolute top-[-20px] right-1/2" />
+              </div>
               <span className="">{station}</span>
             </div>
           ))}
