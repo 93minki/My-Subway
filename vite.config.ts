@@ -10,9 +10,6 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["favicon.png", "robots.txt"],
       injectRegister: "auto",
-      srcDir: "src",
-      filename: "sw.js",
-      strategies: "injectManifest",
       manifest: {
         name: "My Subway Info Realtime",
         short_name: "MySubway",
