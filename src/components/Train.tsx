@@ -18,13 +18,16 @@ const Train = ({ trainInfo }: TrainProps) => {
   const { subwayId } = trainInfo;
   return (
     <div
-      className={`flex flex-col gap-4 border border-${subwayId} border-opacity-25 w-[300px] border shadow-lg p-2 rounded-md`}
+      className={`flex min-w-[200px] flex-col gap-4 border border-${subwayId} border-opacity-25 border shadow-lg p-2 rounded-md`}
     >
-      <span>{trainInfo.trainLineNm}</span>
-      <span>도착 메세지: {trainInfo.arvlMsg3}</span>
-      <span>도착 메세지: {trainInfo.arvlMsg2}</span>
-      <span>코드: {arrivalCode[trainInfo.arvlCd]}</span>
-      <span>도착 예정 시간: {trainInfo.barvlDt} sec</span>
+      <div className="flex gap-2">
+        <span>{trainInfo.trainLineNm.split("-")[0]}</span>
+        <span>({trainInfo.btrainSttus})</span>
+      </div>
+      <div className="flex gap-2">
+        <span>{trainInfo.arvlMsg3}</span>
+        <span>[{arrivalCode[trainInfo.arvlCd]}]</span>
+      </div>
     </div>
   );
 };

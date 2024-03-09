@@ -12,8 +12,9 @@ const useSearch = () => {
       eventSourceRef.current.close();
       eventSourceRef.current = null;
     }
+
     eventSourceRef.current = new EventSource(
-      `http://localhost:9090/subway-info?searchWord=${searchWord}`
+      `http://192.168.0.9:9090/subway-info?searchWord=${searchWord}`
     );
     eventSourceRef.current.onmessage = function (event: MessageEvent) {
       const data = JSON.parse(event.data);
