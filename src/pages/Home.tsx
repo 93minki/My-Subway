@@ -47,12 +47,34 @@ export default function Home() {
       });
     }
   };
+  useEffect(() => {
+    // 서비스 워커 등록
+    navigator.serviceWorker
+      .register("/sw.js")
+      .then((registration) => {
+        console.log(
+          "Service Worker registered with scope:",
+          registration.scope
+        );
+      })
+      .catch((err) => {
+        console.error("Service Worker registration failed:", err);
+      });
+
+    // 푸시 알림 권한 요청
+    Notification.requestPermission().then((permission) => {
+      if (permission === "granted") {
+        console.log("Notification permission granted.");
+      }
+    });
+  }, []);
 
   return (
     <div id="home" className="flex flex-col gap-16 max-w-[418px] w-full">
       {isInstallable && (
         <Button onClick={showPWAInstallPrompt}>PWA를 설치하세용</Button>
       )}
+
       <SearchBar />
       <SubwayState />
     </div>
