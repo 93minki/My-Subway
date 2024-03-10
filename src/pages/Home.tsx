@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import SearchBar from "@/components/SearchBar";
 import SubwayState from "@/components/SubwayState";
 import { Button } from "@/components/ui/button";
@@ -9,6 +10,18 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 let defferedPrompt: BeforeInstallPromptEvent | null = null;
+
+function urlBase64ToUint8Array(base64String: string): Uint8Array {
+  const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+  const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
+  const rawData = window.atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+
+  for (let i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i);
+  }
+  return outputArray;
+}
 
 export default function Home() {
   const [isInstallable, setIsInstallable] = useState(false);
@@ -49,31 +62,87 @@ export default function Home() {
   };
   useEffect(() => {
     // 서비스 워커 등록
-    navigator.serviceWorker
-      .register("/sw.js")
-      .then((registration) => {
-        console.log(
-          "Service Worker registered with scope:",
-          registration.scope
-        );
-      })
-      .catch((err) => {
-        console.error("Service Worker registration failed:", err);
-      });
+    // 서비스 워커 및 푸시 관리자 지원 여부 확인
+    if ("serviceWorker" in navigator && "PushManager" in window) {
+      console.log("Service Worker and Push is supported");
 
-    // 푸시 알림 권한 요청
+      // 서비스 워커 등록
+      navigator.serviceWorker
+        .register("/sw.js")
+        .then((swReg: ServiceWorkerRegistration) => {
+          console.log("Service Worker is registered", swReg);
+
+          subscribeUser(swReg);
+        })
+        .catch((error: any) => {
+          console.error("Service Worker Error", error);
+        });
+    } else {
+      console.warn("Push messaging is not supported");
+    }
+  }, []);
+
+  const subscribeUser = (swReg: ServiceWorkerRegistration) => {
+    const applicationServerKey = urlBase64ToUint8Array(
+      import.meta.env.VITE_VAPID_PUBLIC_KEY
+    );
+    swReg.pushManager
+      .subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: applicationServerKey,
+      })
+      .then((subscription: PushSubscription) => {
+        console.log("User is subscribed:", subscription);
+
+        // TODO: 서버에 구독 정보를 보내 저장합니다.
+        // 예: fetch('/subscribe', {method: 'POST', body: JSON.stringify(subscription)});
+        fetch(`${import.meta.env.VITE_API_PUSH_ENDPOINT}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(subscription),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            console.log(
+              "Subscription was successfully sent to the server:",
+              data
+            );
+          })
+          .catch((error) => {
+            console.error("Failed to send subscription to server:", error);
+          });
+      })
+      .catch((err: any) => {
+        console.log("Failed to subscribe the user: ", err);
+      });
+  };
+  const requestPushPermission = () => {
     Notification.requestPermission().then((permission) => {
       if (permission === "granted") {
         console.log("Notification permission granted.");
+
+        // 사용자가 권한을 허용했다면, 서비스 워커 등록 및 구독을 진행할 수 있습니다.
+        // 이 로직은 이미 구현된 subscribeUser 함수 내에서 처리될 수 있습니다.
+      } else {
+        console.log("Notification permission denied.");
+        // 사용자가 권한을 거부했다면, 추가 알림 요청이나 UI 업데이트를 처리할 수 있습니다.
       }
     });
-  }, []);
+  };
 
   return (
     <div id="home" className="flex flex-col gap-16 max-w-[418px] w-full">
       {isInstallable && (
         <Button onClick={showPWAInstallPrompt}>PWA를 설치하세용</Button>
       )}
+      <Button onClick={requestPushPermission}>푸시 알림 받기</Button>
 
       <SearchBar />
       <SubwayState />
