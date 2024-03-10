@@ -28,6 +28,6 @@
 
     "types": ["vite-plugin-pwa/client"]
   },
-  "include": ["src"],
+  "include": ["src", "src/sw.js"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
