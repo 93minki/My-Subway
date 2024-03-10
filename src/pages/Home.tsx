@@ -25,6 +25,7 @@ function urlBase64ToUint8Array(base64String: string): Uint8Array {
 
 export default function Home() {
   const [isInstallable, setIsInstallable] = useState(false);
+  const [subscriptionInfo, setSubscriptionInfo] = useState<PushSubscription>();
 
   useEffect(() => {
     const handleBeforeInstallPrompt = (e: BeforeInstallPromptEvent) => {
@@ -93,7 +94,7 @@ export default function Home() {
       })
       .then((subscription: PushSubscription) => {
         console.log("User is subscribed:", subscription);
-
+        setSubscriptionInfo(subscription);
         // TODO: 서버에 구독 정보를 보내 저장합니다.
         // 예: fetch('/subscribe', {method: 'POST', body: JSON.stringify(subscription)});
         fetch(`${import.meta.env.VITE_API_ENDPOINT}/subscribe`, {
@@ -135,6 +136,7 @@ export default function Home() {
           headers: {
             "Content-Type": "application/json",
           },
+          body: JSON.stringify({ subscription: subscriptionInfo }),
           // 실제 요청에서는 서버에 저장된 구독 정보를 대상으로 푸시 알림을 보내도록 서버를 구성해야 합니다.
         })
           .then((response) => response.json())
