@@ -72,7 +72,7 @@ export default function Home() {
         .register("/sw.js")
         .then((swReg: ServiceWorkerRegistration) => {
           console.log("Service Worker is registered", swReg);
-
+          console.log("scope", swReg.scope);
           subscribeUser(swReg);
         })
         .catch((error: any) => {

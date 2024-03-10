@@ -28,12 +28,5 @@ self.addEventListener("push", (event) => {
     badge: "/icon/app_logo_192.webp",
   };
 
-  event
-    .waitUntil(self.registration.showNotification(title, options))
-    .then(() => {
-      console.log("Notification is shown!");
-    })
-    .catch((err) => {
-      console.log("Failed to show the notification:", err);
-    });
+  event.waitUntil(self.registration.showNotification(title, options));
 });
