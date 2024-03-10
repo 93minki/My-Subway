@@ -83,10 +83,17 @@ export default function Home() {
     }
   }, []);
 
-  const subscribeUser = (swReg: ServiceWorkerRegistration) => {
+  const subscribeUser = async (swReg: ServiceWorkerRegistration) => {
     const applicationServerKey = urlBase64ToUint8Array(
       import.meta.env.VITE_VAPID_PUBLIC_KEY
     );
+
+    const result = await swReg.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: applicationServerKey,
+    });
+    console.log("result", result);
+
     swReg.pushManager
       .subscribe({
         userVisibleOnly: true,
@@ -131,22 +138,24 @@ export default function Home() {
 
         // 사용자가 권한을 허용했다면, 서비스 워커 등록 및 구독을 진행할 수 있습니다.
         // 이 로직은 이미 구현된 subscribeUser 함수 내에서 처리될 수 있습니다.
-        fetch(`${import.meta.env.VITE_API_ENDPOINT}/push`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ subscription: subscriptionInfo }),
-          // 실제 요청에서는 서버에 저장된 구독 정보를 대상으로 푸시 알림을 보내도록 서버를 구성해야 합니다.
-        })
-          .then((response) => response.json())
-          .then((data) => console.log("Push test response:", data))
-          .catch((error) => console.error("Failed to send push test:", error));
       } else {
         console.log("Notification permission denied.");
         // 사용자가 권한을 거부했다면, 추가 알림 요청이나 UI 업데이트를 처리할 수 있습니다.
       }
     });
+  };
+  const pushNotificationTest = () => {
+    fetch(`${import.meta.env.VITE_API_ENDPOINT}/push`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ subscription: subscriptionInfo }),
+      // 실제 요청에서는 서버에 저장된 구독 정보를 대상으로 푸시 알림을 보내도록 서버를 구성해야 합니다.
+    })
+      .then((response) => response.json())
+      .then((data) => console.log("Push test response:", data))
+      .catch((error) => console.error("Failed to send push test:", error));
   };
 
   return (
@@ -154,7 +163,8 @@ export default function Home() {
       {isInstallable && (
         <Button onClick={showPWAInstallPrompt}>PWA를 설치하세용</Button>
       )}
-      <Button onClick={requestPushPermission}>푸시 알림 받기</Button>
+      <Button onClick={requestPushPermission}>푸시 알림 허용</Button>
+      <Button onClick={pushNotificationTest}>푸시 알림 테스트</Button>
 
       <SearchBar />
       <SubwayState />

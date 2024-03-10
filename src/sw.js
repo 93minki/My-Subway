@@ -6,6 +6,7 @@ self.__WB_MANIFEST;
 // 설치 이벤트가 발생할 때 로그를 출력합니다.
 self.addEventListener("install", (event) => {
   console.log("Service Worker 설치됨.", event);
+  self.skipWaiting();
 });
 
 // 서비스 워커가 활성화될 때 로그를 출력합니다.
