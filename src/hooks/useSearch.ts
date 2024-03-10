@@ -14,7 +14,9 @@ const useSearch = () => {
     }
 
     eventSourceRef.current = new EventSource(
-      `${import.meta.env.VITE_API_ENDPOINT}?searchWord=${searchWord}`
+      `${
+        import.meta.env.VITE_API_ENDPOINT
+      }/subway-info?searchWord=${searchWord}`
     );
     eventSourceRef.current.onmessage = function (event: MessageEvent) {
       const data = JSON.parse(event.data);

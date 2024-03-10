@@ -96,7 +96,7 @@ export default function Home() {
 
         // TODO: 서버에 구독 정보를 보내 저장합니다.
         // 예: fetch('/subscribe', {method: 'POST', body: JSON.stringify(subscription)});
-        fetch(`${import.meta.env.VITE_API_PUSH_ENDPOINT}`, {
+        fetch(`${import.meta.env.VITE_API_ENDPOINT}/subscribe`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -130,6 +130,16 @@ export default function Home() {
 
         // 사용자가 권한을 허용했다면, 서비스 워커 등록 및 구독을 진행할 수 있습니다.
         // 이 로직은 이미 구현된 subscribeUser 함수 내에서 처리될 수 있습니다.
+        fetch(`${import.meta.env.VITE_API_ENDPOINT}/push`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          // 실제 요청에서는 서버에 저장된 구독 정보를 대상으로 푸시 알림을 보내도록 서버를 구성해야 합니다.
+        })
+          .then((response) => response.json())
+          .then((data) => console.log("Push test response:", data))
+          .catch((error) => console.error("Failed to send push test:", error));
       } else {
         console.log("Notification permission denied.");
         // 사용자가 권한을 거부했다면, 추가 알림 요청이나 UI 업데이트를 처리할 수 있습니다.
