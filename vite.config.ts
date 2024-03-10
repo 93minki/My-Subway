@@ -7,9 +7,12 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
+      strategies: "injectManifest",
+      injectManifest: {
+        swSrc: "src/sw.js", // 원본 서비스 워커 파일 경로
+      },
       registerType: "autoUpdate",
-      includeAssets: ["favicon.png", "robots.txt"],
-      injectRegister: "auto",
+      includeAssets: ["favicon.png", "robots.txt", "icons/*"], // 'icons/*' 추가
       manifest: {
         name: "My Subway Info Realtime",
         short_name: "MySubway",
