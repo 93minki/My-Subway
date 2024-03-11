@@ -11,18 +11,6 @@ interface BeforeInstallPromptEvent extends Event {
 
 let defferedPrompt: BeforeInstallPromptEvent | null = null;
 
-function urlBase64ToUint8Array(base64String: string): Uint8Array {
-  const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
-  const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
-  const rawData = window.atob(base64);
-  const outputArray = new Uint8Array(rawData.length);
-
-  for (let i = 0; i < rawData.length; ++i) {
-    outputArray[i] = rawData.charCodeAt(i);
-  }
-  return outputArray;
-}
-
 export default function Home() {
   const [isInstallable, setIsInstallable] = useState(false);
   const [subscriptionInfo, setSubscriptionInfo] = useState<PushSubscription>();
@@ -84,9 +72,7 @@ export default function Home() {
   }, []);
 
   const subscribeUser = async (swReg: ServiceWorkerRegistration) => {
-    const applicationServerKey = urlBase64ToUint8Array(
-      import.meta.env.VITE_VAPID_PUBLIC_KEY
-    );
+    const applicationServerKey = import.meta.env.VITE_VAPID_PUBLIC_KEY;
 
     const result = await swReg.pushManager.subscribe({
       userVisibleOnly: true,
