@@ -50,12 +50,9 @@ export default function Home() {
     }
   };
   useEffect(() => {
-    // 서비스 워커 등록
-    // 서비스 워커 및 푸시 관리자 지원 여부 확인
     if ("serviceWorker" in navigator && "PushManager" in window) {
       console.log("Service Worker and Push is supported");
 
-      // 서비스 워커 등록
       navigator.serviceWorker
         .register("/sw.js")
         .then((swReg: ServiceWorkerRegistration) => {
@@ -74,12 +71,6 @@ export default function Home() {
   const subscribeUser = async (swReg: ServiceWorkerRegistration) => {
     const applicationServerKey = import.meta.env.VITE_VAPID_PUBLIC_KEY;
 
-    const result = await swReg.pushManager.subscribe({
-      userVisibleOnly: true,
-      applicationServerKey: applicationServerKey,
-    });
-    console.log("result", result);
-
     swReg.pushManager
       .subscribe({
         userVisibleOnly: true,
@@ -88,8 +79,6 @@ export default function Home() {
       .then((subscription: PushSubscription) => {
         console.log("User is subscribed:", subscription);
         setSubscriptionInfo(subscription);
-        // TODO: 서버에 구독 정보를 보내 저장합니다.
-        // 예: fetch('/subscribe', {method: 'POST', body: JSON.stringify(subscription)});
         fetch(`${import.meta.env.VITE_API_ENDPOINT}/subscribe`, {
           method: "POST",
           headers: {
@@ -115,21 +104,10 @@ export default function Home() {
       })
       .catch((err: any) => {
         console.log("Failed to subscribe the user: ", err);
+        alert("알림 권한을 거절하였습니다. 허용해야 하는데...");
       });
   };
-  const requestPushPermission = () => {
-    Notification.requestPermission().then((permission) => {
-      if (permission === "granted") {
-        console.log("Notification permission granted.");
 
-        // 사용자가 권한을 허용했다면, 서비스 워커 등록 및 구독을 진행할 수 있습니다.
-        // 이 로직은 이미 구현된 subscribeUser 함수 내에서 처리될 수 있습니다.
-      } else {
-        console.log("Notification permission denied.");
-        // 사용자가 권한을 거부했다면, 추가 알림 요청이나 UI 업데이트를 처리할 수 있습니다.
-      }
-    });
-  };
   const pushNotificationTest = () => {
     fetch(`${import.meta.env.VITE_API_ENDPOINT}/push`, {
       method: "POST",
@@ -149,9 +127,7 @@ export default function Home() {
       {isInstallable && (
         <Button onClick={showPWAInstallPrompt}>PWA를 설치하세용</Button>
       )}
-      <Button onClick={requestPushPermission}>푸시 알림 허용</Button>
       <Button onClick={pushNotificationTest}>푸시 알림 테스트</Button>
-
       <SearchBar />
       <SubwayState />
     </div>
