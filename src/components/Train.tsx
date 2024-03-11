@@ -1,3 +1,4 @@
+import useTrackSubway from "@/hooks/useTrackSubway";
 import { realTimeArrivalListType } from "@/types/ResponseType";
 
 interface TrainProps {
@@ -14,11 +15,21 @@ const arrivalCode: { [key: string]: string } = {
   99: "운행중",
 };
 
+// API 필요 클릭했을 때 구독 요청을 보내야 함
+
 const Train = ({ trainInfo }: TrainProps) => {
-  const { subwayId } = trainInfo;
+  const { subwayId, btrainNo } = trainInfo;
+  const { trackingState, trackSubway } = useTrackSubway();
+
   return (
     <div
       className={`flex min-w-[200px] flex-col gap-4 border border-${subwayId} border-opacity-25 border shadow-lg p-2 rounded-md`}
+      onClick={() => {
+        console.log("click");
+        console.log("trainInfo", btrainNo);
+        trackSubway(btrainNo);
+        console.log("trackingState", trackingState);
+      }}
     >
       <div className="flex gap-2">
         <span>{trainInfo.trainLineNm.split("-")[0]}</span>
