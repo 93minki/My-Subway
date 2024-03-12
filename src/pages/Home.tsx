@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import SearchBar from "@/components/SearchBar";
 import SubwayState from "@/components/SubwayState";
 import { Button } from "@/components/ui/button";
+import useSearchResultStore from "@/stores/searchResult";
 import { useEffect, useState } from "react";
 
 interface BeforeInstallPromptEvent extends Event {
@@ -13,7 +15,12 @@ let defferedPrompt: BeforeInstallPromptEvent | null = null;
 
 export default function Home() {
   const [isInstallable, setIsInstallable] = useState(false);
-  const [subscriptionInfo, setSubscriptionInfo] = useState<PushSubscription>();
+  const userSubscriptionInfo = useSearchResultStore(
+    (state) => state.userSubscriptionInfo
+  );
+  const setUserSubscriptionInfo = useSearchResultStore(
+    (state) => state.setUserSubscriptionInfo
+  );
 
   useEffect(() => {
     const handleBeforeInstallPrompt = (e: BeforeInstallPromptEvent) => {
@@ -68,7 +75,31 @@ export default function Home() {
     }
   }, []);
 
+  // const unsubsribeUser = async (swReg: ServiceWorkerRegistration) => {
+  //   const subscription = await swReg.pushManager.getSubscription();
+
+  //   if (subscription) {
+  //     const successful = await subscription.unsubscribe();
+  //     if (successful) {
+  //       console.log("구독 취소");
+  //     } else {
+  //       console.log("구독 취소 실패");
+  //     }
+  //   } else {
+  //     console.log("구독 상태가 아님");
+  //   }
+  // };
+
   const subscribeUser = async (swReg: ServiceWorkerRegistration) => {
+    const subscription = await swReg.pushManager.getSubscription();
+    console.log("subscription", subscription);
+
+    if (subscription) {
+      console.log("이미 구독중임!");
+      setUserSubscriptionInfo(subscription);
+      return;
+    }
+
     const applicationServerKey = import.meta.env.VITE_VAPID_PUBLIC_KEY;
 
     swReg.pushManager
@@ -78,7 +109,7 @@ export default function Home() {
       })
       .then((subscription: PushSubscription) => {
         console.log("User is subscribed:", subscription);
-        setSubscriptionInfo(subscription);
+        setUserSubscriptionInfo(subscription);
         fetch(`${import.meta.env.VITE_API_ENDPOINT}/subscribe`, {
           method: "POST",
           headers: {
@@ -114,7 +145,7 @@ export default function Home() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ subscription: subscriptionInfo }),
+      body: JSON.stringify({ subscription: userSubscriptionInfo }),
       // 실제 요청에서는 서버에 저장된 구독 정보를 대상으로 푸시 알림을 보내도록 서버를 구성해야 합니다.
     })
       .then((response) => response.json())

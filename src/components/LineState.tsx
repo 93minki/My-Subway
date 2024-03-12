@@ -121,7 +121,10 @@ const LineState = ({ lineList }: LineStateProps) => {
             >
               {sortedUpLine.map((line) =>
                 line.arvlMsg3 === station ? (
-                  <TbTrain className="absolute top-[-20px] left-[37px]" />
+                  <TbTrain
+                    className="absolute top-[-20px] left-[37px]"
+                    key={Math.random()}
+                  />
                 ) : (
                   ""
                 )

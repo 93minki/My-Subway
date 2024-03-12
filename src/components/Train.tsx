@@ -19,17 +19,19 @@ const arrivalCode: { [key: string]: string } = {
 
 const Train = ({ trainInfo }: TrainProps) => {
   const { subwayId, btrainNo } = trainInfo;
-  const { trackingState, trackSubway } = useTrackSubway();
+  const { trackSubway } = useTrackSubway();
+
+  const onClickHandler = () => {
+    const confirmMessage = confirm("지하철을 등록하시겠습니까?");
+    if (confirmMessage) {
+      trackSubway(btrainNo);
+    }
+  };
 
   return (
     <div
       className={`flex min-w-[200px] flex-col gap-4 border border-${subwayId} border-opacity-25 border shadow-lg p-2 rounded-md`}
-      onClick={() => {
-        console.log("click");
-        console.log("trainInfo", btrainNo);
-        trackSubway(btrainNo);
-        console.log("trackingState", trackingState);
-      }}
+      onClick={onClickHandler}
     >
       <div className="flex gap-2">
         <span>{trainInfo.trainLineNm.split("-")[0]}</span>

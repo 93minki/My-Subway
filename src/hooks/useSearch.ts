@@ -14,10 +14,12 @@ const useSearch = () => {
     }
 
     eventSourceRef.current = new EventSource(
-      `${
-        import.meta.env.VITE_API_ENDPOINT
-      }/subway-info?searchWord=${searchWord}`
+      `http://localhost:9090/subway-info?searchWord=${searchWord}`,
+      {
+        withCredentials: true,
+      }
     );
+    console.log("credentials", eventSourceRef.current.withCredentials);
     eventSourceRef.current.onmessage = function (event: MessageEvent) {
       const data = JSON.parse(event.data);
       setSearchResult(data);
