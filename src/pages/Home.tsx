@@ -75,20 +75,20 @@ export default function Home() {
     }
   }, []);
 
-  // const unsubsribeUser = async (swReg: ServiceWorkerRegistration) => {
-  //   const subscription = await swReg.pushManager.getSubscription();
+  const unsubsribeUser = async (swReg: ServiceWorkerRegistration) => {
+    const subscription = await swReg.pushManager.getSubscription();
 
-  //   if (subscription) {
-  //     const successful = await subscription.unsubscribe();
-  //     if (successful) {
-  //       console.log("구독 취소");
-  //     } else {
-  //       console.log("구독 취소 실패");
-  //     }
-  //   } else {
-  //     console.log("구독 상태가 아님");
-  //   }
-  // };
+    if (subscription) {
+      const successful = await subscription.unsubscribe();
+      if (successful) {
+        console.log("구독 취소");
+      } else {
+        console.log("구독 취소 실패");
+      }
+    } else {
+      console.log("구독 상태가 아님");
+    }
+  };
 
   const subscribeUser = async (swReg: ServiceWorkerRegistration) => {
     const subscription = await swReg.pushManager.getSubscription();
@@ -97,6 +97,7 @@ export default function Home() {
     if (subscription) {
       console.log("이미 구독중임!");
       setUserSubscriptionInfo(subscription);
+      // unsubsribeUser(swReg);
       return;
     }
 

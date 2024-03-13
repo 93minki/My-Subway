@@ -25,12 +25,12 @@ const prevNextStation = (subwayJson: SubwayInfoType, stationId: string) => {
 
   const prevStation: string[] = stationKeys
     .slice(Math.max(0, stationIndex - 3), stationIndex)
-    .map((key) => subwayJson.station[key]);
+    .map((stKey) => subwayJson.station[stKey]);
   prevStation.push(subwayJson.station[stationId]);
 
   const nextStation: string[] = stationKeys
     .slice(stationIndex + 1, stationIndex + 4)
-    .map((key) => subwayJson.station[key])
+    .map((stKey) => subwayJson.station[stKey])
     .reverse();
   nextStation.push(subwayJson.station[stationId]);
 
@@ -109,21 +109,18 @@ const LineState = ({ lineList }: LineStateProps) => {
         <div className="flex overflow-auto items-start gap-4 w-full">
           {sortedUpLine.map((line) => {
             console.log("line", line);
-            return <Train key={Math.random()} trainInfo={line} />;
+            return <Train key={Number(line.btrainNo)} trainInfo={line} />;
           })}
         </div>
         <div className="w-full flex justify-between relative mt-10">
           <div className={`border-b-2 w-full absolute border-${subwayId}`} />
-          {nextStation.map((station) => (
-            <div
-              className="relative p-2 w-1/4 flex justify-center"
-              key={Math.random()}
-            >
+          {nextStation.map((station, i) => (
+            <div className="relative p-2 w-1/4 flex justify-center" key={i}>
               {sortedUpLine.map((line) =>
                 line.arvlMsg3 === station ? (
                   <TbTrain
                     className="absolute top-[-20px] left-[37px]"
-                    key={Math.random()}
+                    key={Number(line.btrainNo)}
                   />
                 ) : (
                   ""
@@ -173,7 +170,10 @@ const LineState = ({ lineList }: LineStateProps) => {
             >
               {sortedDownLine.map((line) =>
                 line.arvlMsg3 === station ? (
-                  <TbTrain className="absolute top-[-20px] left-[37px]" />
+                  <TbTrain
+                    key={line.btrainNo}
+                    className="absolute top-[-20px] left-[37px]"
+                  />
                 ) : (
                   ""
                 )
