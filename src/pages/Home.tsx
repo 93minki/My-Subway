@@ -15,9 +15,6 @@ let defferedPrompt: BeforeInstallPromptEvent | null = null;
 
 export default function Home() {
   const [isInstallable, setIsInstallable] = useState(false);
-  const userSubscriptionInfo = useSearchResultStore(
-    (state) => state.userSubscriptionInfo
-  );
   const setUserSubscriptionInfo = useSearchResultStore(
     (state) => state.setUserSubscriptionInfo
   );
@@ -75,21 +72,6 @@ export default function Home() {
     }
   }, []);
 
-  const unsubsribeUser = async (swReg: ServiceWorkerRegistration) => {
-    const subscription = await swReg.pushManager.getSubscription();
-
-    if (subscription) {
-      const successful = await subscription.unsubscribe();
-      if (successful) {
-        console.log("구독 취소");
-      } else {
-        console.log("구독 취소 실패");
-      }
-    } else {
-      console.log("구독 상태가 아님");
-    }
-  };
-
   const subscribeUser = async (swReg: ServiceWorkerRegistration) => {
     const subscription = await swReg.pushManager.getSubscription();
     console.log("subscription", subscription);
@@ -97,7 +79,6 @@ export default function Home() {
     if (subscription) {
       console.log("이미 구독중임!");
       setUserSubscriptionInfo(subscription);
-      // unsubsribeUser(swReg);
       return;
     }
 
@@ -138,20 +119,6 @@ export default function Home() {
         console.log("Failed to subscribe the user: ", err);
         alert("알림 권한을 거절하였습니다. 허용해야 하는데...");
       });
-  };
-
-  const pushNotificationTest = () => {
-    fetch(`${import.meta.env.VITE_API_ENDPOINT}/push`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ subscription: userSubscriptionInfo }),
-      // 실제 요청에서는 서버에 저장된 구독 정보를 대상으로 푸시 알림을 보내도록 서버를 구성해야 합니다.
-    })
-      .then((response) => response.json())
-      .then((data) => console.log("Push test response:", data))
-      .catch((error) => console.error("Failed to send push test:", error));
   };
 
   return (
