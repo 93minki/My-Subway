@@ -8,17 +8,20 @@ const useTrackSubway = () => {
   );
 
   const trackSubway = async (subwayNumber: string) => {
-    const response = await fetch(`http://localhost:9090/subscribe/subway`, {
-      credentials: "include",
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        subwayNumber,
-        userSubscriptionInfo,
-      }),
-    });
+    const response = await fetch(
+      `${import.meta.env.VITE_API_ENDPOINT}/subscribe/subway/${subwayNumber}`,
+      {
+        credentials: "include",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          subwayNumber,
+          userSubscriptionInfo,
+        }),
+      }
+    );
     const result = await response.json();
     console.log("result", result);
     setTrackingState(result);

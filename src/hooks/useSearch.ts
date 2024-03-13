@@ -16,7 +16,9 @@ const useSearch = () => {
 
       if (!eventSourceRef.current) {
         eventSourceRef.current = new EventSource(
-          `http://localhost:9090/subway-info?searchWord=${searchWord}`,
+          `${
+            import.meta.env.VITE_API_ENDPOINT
+          }/subway-info?searchWord=${searchWord}`,
           { withCredentials: true }
         );
         console.log("event source 추가");
