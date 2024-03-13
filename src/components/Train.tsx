@@ -1,5 +1,13 @@
 import useTrackSubway from "@/hooks/useTrackSubway";
 import { realTimeArrivalListType } from "@/types/ResponseType";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "./ui/dialog";
 
 interface TrainProps {
   trainInfo: realTimeArrivalListType;
@@ -31,7 +39,9 @@ const Train = ({ trainInfo }: TrainProps) => {
   return (
     <div
       className={`flex min-w-[200px] flex-col gap-4 border border-${subwayId} border-opacity-25 border shadow-lg p-2 rounded-md`}
-      onClick={onClickHandler}
+      onClick={() => {
+        console.log("hello");
+      }}
     >
       <div className="flex gap-2">
         <span>{trainInfo.trainLineNm.split("-")[0]}</span>
@@ -41,6 +51,17 @@ const Train = ({ trainInfo }: TrainProps) => {
         <span>{trainInfo.arvlMsg3}</span>
         <span>[{arrivalCode[trainInfo.arvlCd]}]</span>
       </div>
+      <Dialog>
+        <DialogTrigger>등록하기</DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>지하철 알림을 등록하시겠습니까</DialogTitle>
+            <DialogDescription>
+              설정한 지하철의 현재 위치를 실시간 알림으로 확인할 수 있습니다.
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
