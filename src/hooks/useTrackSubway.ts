@@ -9,7 +9,7 @@ const useTrackSubway = () => {
 
   const trackSubway = async (subwayNumber: string) => {
     const response = await fetch(
-      `${import.meta.env.VITE_API_ENDPOINT}/subscribe/subway/${subwayNumber}`,
+      `${import.meta.env.VITE_API_ENDPOINT}/subscribe/subway`,
       {
         credentials: "include",
         method: "POST",
