@@ -1,7 +1,9 @@
 import useTrackSubway from "@/hooks/useTrackSubway";
 import { realTimeArrivalListType } from "@/types/ResponseType";
+import { Button } from "./ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
@@ -30,10 +32,7 @@ const Train = ({ trainInfo }: TrainProps) => {
   const { trackSubway } = useTrackSubway();
 
   const onClickHandler = () => {
-    const confirmMessage = confirm("지하철을 등록하시겠습니까?");
-    if (confirmMessage) {
-      trackSubway(btrainNo);
-    }
+    trackSubway(btrainNo);
   };
 
   return (
@@ -60,6 +59,11 @@ const Train = ({ trainInfo }: TrainProps) => {
               설정한 지하철의 현재 위치를 실시간 알림으로 확인할 수 있습니다.
             </DialogDescription>
           </DialogHeader>
+          <DialogClose asChild>
+            <Button type="button" onClick={onClickHandler}>
+              등록하기
+            </Button>
+          </DialogClose>
         </DialogContent>
       </Dialog>
     </div>

@@ -155,11 +155,10 @@ export default function Home() {
   };
 
   return (
-    <div id="home" className="flex flex-col gap-16 max-w-[418px] w-full">
+    <div id="home" className="flex flex-col gap-16 max-w-[418px] w-full mt-4">
       {isInstallable && (
         <Button onClick={showPWAInstallPrompt}>PWA를 설치하세용</Button>
       )}
-      <Button onClick={pushNotificationTest}>푸시 알림 테스트</Button>
       <SearchBar />
       <SubwayState />
     </div>

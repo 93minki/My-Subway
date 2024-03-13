@@ -21,7 +21,10 @@ const SearchBar = () => {
     searchSubway(searchWord);
   };
   return (
-    <div>
+    <div className="flex flex-col gap-4">
+      <Button type="button" onClick={closeConnection}>
+        알림 끄기
+      </Button>
       <div id="search-bar" className="flex max-w-[390px] w-full m-auto gap-2">
         <Input
           type="text"
@@ -33,9 +36,6 @@ const SearchBar = () => {
           Search
         </Button>
       </div>
-      <Button type="button" onClick={closeConnection}>
-        알림 끄기
-      </Button>
     </div>
   );
 };
