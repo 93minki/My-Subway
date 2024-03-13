@@ -69,7 +69,7 @@ const SubwayState = () => {
       </TabsList>
       {Object.keys(subwayObject).map((list) => (
         <TabsContent key={Math.random()} value={list}>
-          <LineState key={Math.random()} lineList={subwayObject[list]} />
+          <LineState lineList={subwayObject[list]} />
         </TabsContent>
       ))}
     </Tabs>

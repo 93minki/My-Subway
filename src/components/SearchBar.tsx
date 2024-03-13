@@ -5,7 +5,7 @@ import { Input } from "./ui/input";
 
 const SearchBar = () => {
   const [searchWord, setSearchWord] = useState("");
-  const { searchSubway } = useSearch();
+  const { searchSubway, closeConnection } = useSearch();
 
   const inputOnChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchWord(e.target.value);
@@ -18,19 +18,24 @@ const SearchBar = () => {
       setSearchWord("");
     }
     // NOTE 검색어로 검색 실행 후 zustand store에 결과값 저장
-    await searchSubway(searchWord);
+    searchSubway(searchWord);
   };
   return (
-    <div id="search-bar" className="flex max-w-[390px] w-full m-auto gap-2">
-      <Input
-        type="text"
-        placeholder="write subway name"
-        onChange={inputOnChangeHandler}
-        value={searchWord}
-      />
-      <Button type="button" onClick={buttonOnClickHandler}>
-        Search
+    <div className="flex flex-col gap-4">
+      <Button type="button" onClick={closeConnection}>
+        알림 끄기
       </Button>
+      <div id="search-bar" className="flex max-w-[390px] w-full m-auto gap-2">
+        <Input
+          type="text"
+          placeholder="write subway name"
+          onChange={inputOnChangeHandler}
+          value={searchWord}
+        />
+        <Button type="button" onClick={buttonOnClickHandler}>
+          Search
+        </Button>
+      </div>
     </div>
   );
 };

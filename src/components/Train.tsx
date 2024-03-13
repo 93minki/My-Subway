@@ -1,4 +1,15 @@
+import useTrackSubway from "@/hooks/useTrackSubway";
 import { realTimeArrivalListType } from "@/types/ResponseType";
+import { Button } from "./ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "./ui/dialog";
 
 interface TrainProps {
   trainInfo: realTimeArrivalListType;
@@ -14,11 +25,22 @@ const arrivalCode: { [key: string]: string } = {
   99: "운행중",
 };
 
+// API 필요 클릭했을 때 구독 요청을 보내야 함
+
 const Train = ({ trainInfo }: TrainProps) => {
-  const { subwayId } = trainInfo;
+  const { subwayId, btrainNo } = trainInfo;
+  const { trackSubway } = useTrackSubway();
+
+  const onClickHandler = () => {
+    trackSubway(btrainNo);
+  };
+
   return (
     <div
       className={`flex min-w-[200px] flex-col gap-4 border border-${subwayId} border-opacity-25 border shadow-lg p-2 rounded-md`}
+      onClick={() => {
+        console.log("hello");
+      }}
     >
       <div className="flex gap-2">
         <span>{trainInfo.trainLineNm.split("-")[0]}</span>
@@ -28,6 +50,22 @@ const Train = ({ trainInfo }: TrainProps) => {
         <span>{trainInfo.arvlMsg3}</span>
         <span>[{arrivalCode[trainInfo.arvlCd]}]</span>
       </div>
+      <Dialog>
+        <DialogTrigger>등록하기</DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>지하철 알림을 등록하시겠습니까</DialogTitle>
+            <DialogDescription>
+              설정한 지하철의 현재 위치를 실시간 알림으로 확인할 수 있습니다.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogClose asChild>
+            <Button type="button" onClick={onClickHandler}>
+              등록하기
+            </Button>
+          </DialogClose>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
