@@ -72,7 +72,6 @@ export default function Home() {
         });
     } else {
       console.warn("Push messaging is not supported");
-      requestPushPermission();
     }
   }, []);
 
@@ -121,6 +120,7 @@ export default function Home() {
       })
       .catch((err: any) => {
         console.log("Failed to subscribe the user: ", err);
+        requestPushPermission();
       });
   };
 

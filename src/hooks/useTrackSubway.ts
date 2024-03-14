@@ -8,10 +8,10 @@ const useTrackSubway = () => {
   );
 
   const trackSubway = async (subwayNumber: string) => {
+    console.log("지하철 추적 전 유저 정보", userSubscriptionInfo);
     const response = await fetch(
       `${import.meta.env.VITE_API_ENDPOINT}/subscribe/subway`,
       {
-        credentials: "include",
         method: "POST",
         headers: {
           "Content-Type": "application/json",
