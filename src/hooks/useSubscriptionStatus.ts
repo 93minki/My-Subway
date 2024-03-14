@@ -1,6 +1,5 @@
 const useSubscriptionStatus = () => {
   const CheckSubscriptionStatus = async (subscription: PushSubscription) => {
-    console.log("상태 체크 전", subscription);
     const resposne = await fetch(
       `${import.meta.env.VITE_API_ENDPOINT}/subscribe/check`,
       {
@@ -11,10 +10,9 @@ const useSubscriptionStatus = () => {
         body: JSON.stringify({ subscription }),
       }
     );
-    console.log("상태 체크 후 ");
 
     const result = await resposne.json();
-    if (result.status === 200) {
+    if (result.message === "구독중인 상태입니다.") {
       return true;
     }
     return false;
