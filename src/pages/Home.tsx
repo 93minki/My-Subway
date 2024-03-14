@@ -54,6 +54,9 @@ export default function Home() {
     }
   };
   useEffect(() => {
+    console.log("service worker supported", "serviceWorker" in navigator);
+    console.log("PushManager supported", "PushManager" in window);
+
     if ("serviceWorker" in navigator && "PushManager" in window) {
       console.log("Service Worker and Push is supported");
 
@@ -69,6 +72,7 @@ export default function Home() {
         });
     } else {
       console.warn("Push messaging is not supported");
+      requestPushPermission();
     }
   }, []);
 
@@ -117,8 +121,17 @@ export default function Home() {
       })
       .catch((err: any) => {
         console.log("Failed to subscribe the user: ", err);
-        alert("알림 권한을 거절하였습니다. 허용해야 하는데...");
       });
+  };
+
+  const requestPushPermission = () => {
+    Notification.requestPermission().then((permission) => {
+      if (permission === "granted") {
+        console.log("Notification permission granted");
+      } else {
+        console.log("Notification permission denied.");
+      }
+    });
   };
 
   return (
