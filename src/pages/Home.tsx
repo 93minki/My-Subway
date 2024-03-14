@@ -72,7 +72,6 @@ export default function Home() {
         });
     } else {
       console.warn("Push messaging is not supported");
-      requestPushPermission();
     }
   }, []);
 
@@ -139,6 +138,7 @@ export default function Home() {
       {isInstallable && (
         <Button onClick={showPWAInstallPrompt}>PWA를 설치하세용</Button>
       )}
+      <Button onClick={requestPushPermission}>푸시 알림 허용</Button>
       <SearchBar />
       <SubwayState />
     </div>
