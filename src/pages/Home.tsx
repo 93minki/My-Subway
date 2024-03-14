@@ -72,6 +72,7 @@ export default function Home() {
         });
     } else {
       console.warn("Push messaging is not supported");
+      requestPushPermission();
     }
   }, []);
 
@@ -80,7 +81,7 @@ export default function Home() {
     console.log("subscription", subscription);
 
     if (subscription) {
-      console.log("이미 구독중임!");
+      console.log("이미 구독중임!", subscription.endpoint);
       setUserSubscriptionInfo(subscription);
       return;
     }
@@ -120,7 +121,6 @@ export default function Home() {
       })
       .catch((err: any) => {
         console.log("Failed to subscribe the user: ", err);
-        requestPushPermission();
       });
   };
 
