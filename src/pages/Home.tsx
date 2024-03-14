@@ -3,6 +3,7 @@
 import SearchBar from "@/components/SearchBar";
 import SubwayState from "@/components/SubwayState";
 import { Button } from "@/components/ui/button";
+import useSubscriptionStatus from "@/hooks/useSubscriptionStatus";
 import useSearchResultStore from "@/stores/searchResult";
 import { useEffect, useState } from "react";
 
@@ -18,6 +19,8 @@ export default function Home() {
   const setUserSubscriptionInfo = useSearchResultStore(
     (state) => state.setUserSubscriptionInfo
   );
+
+  const { CheckSubscriptionStatus } = useSubscriptionStatus();
 
   useEffect(() => {
     const handleBeforeInstallPrompt = (e: BeforeInstallPromptEvent) => {
@@ -53,6 +56,16 @@ export default function Home() {
       });
     }
   };
+
+  const unSubscribeUser = async (subscription: PushSubscription) => {
+    const unSubscribeStatus = await subscription.unsubscribe();
+    if (unSubscribeStatus) {
+      console.log("구독 취소에 성공하였습니다.");
+    } else {
+      console.log("구독 취소에 실패하였습니다.");
+    }
+  };
+
   useEffect(() => {
     console.log("service worker supported", "serviceWorker" in navigator);
     console.log("PushManager supported", "PushManager" in window);
@@ -77,12 +90,24 @@ export default function Home() {
 
   const subscribeUser = async (swReg: ServiceWorkerRegistration) => {
     const subscription = await swReg.pushManager.getSubscription();
-    console.log("subscription", subscription);
+    console.log("subscription~~~~~~", subscription);
+    // 여기서 구독 정보가 있다는 것은 이미 클라이언트는 푸시 서비스를 구독중이라는 뜻임
+    // 하지만 그 구독 정보가 서버에 있다는 보장이 없는 상태
+    // 따라서 여기에서 서버에 구독정보가 있는지 체크를 해야 함.
 
     if (subscription) {
-      console.log("이미 구독중임!", subscription.endpoint);
-      setUserSubscriptionInfo(subscription);
-      return;
+      console.log("이미 구독중임!", subscription);
+
+      const subscriptionStatus = await CheckSubscriptionStatus(subscription);
+      console.log("서버에 구독 정보가 있는지 여부", subscriptionStatus);
+      if (!subscriptionStatus) {
+        // 구독 상태이지만 서버에는 정보가 없음
+        // 연결을 해제하고 다시 구독해야 함.
+        unSubscribeUser(subscription);
+      } else {
+        setUserSubscriptionInfo(subscription);
+        return;
+      }
     }
 
     const applicationServerKey = import.meta.env.VITE_VAPID_PUBLIC_KEY;

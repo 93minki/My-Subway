@@ -20,8 +20,6 @@ const useSearch = () => {
             import.meta.env.VITE_API_ENDPOINT
           }/subway-info?searchWord=${searchWord}`
         );
-        console.log("event source 추가");
-        console.log("eventSource", eventSourceRef);
 
         eventSourceRef.current.onmessage = (event) => {
           const data = JSON.parse(event.data);
