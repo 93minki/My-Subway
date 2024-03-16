@@ -60,6 +60,7 @@ const SigninForm = () => {
       email: result.payload.email,
       at: result.payload.at,
     });
+    localStorage.setItem("at", result.payload.at);
     // TODO 저장 결과 확인을 위한 로그 삭제 예정
     console.log(result, userInfo);
     if (result.result === "success") {
@@ -110,7 +111,7 @@ const SigninForm = () => {
             </FormItem>
           )}
         />
-        <Button type="submit">회원가입</Button>
+        <Button type="submit">로그인</Button>
       </form>
     </Form>
   );
