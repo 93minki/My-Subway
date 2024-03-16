@@ -1,12 +1,10 @@
 import CommonLayout from "./layout/CommonLayout";
 import Home from "./pages/Home";
+import SigninPage from "./pages/Signin";
 
 function App() {
-  return (
-    <CommonLayout>
-      <Home />
-    </CommonLayout>
-  );
+  const test = true;
+  return <CommonLayout>{test ? <SigninPage /> : <Home />}</CommonLayout>;
 }
 
 export default App;
