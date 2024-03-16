@@ -35,9 +35,25 @@ const SignupForm = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     // 회원가입 로직 추가
-    console.log(values);
+    const response = await fetch(
+      `${import.meta.env.VITE_API_ENDPOINT}/auth/signup`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: values.email,
+          nickname: values.nickname,
+          password: values.password,
+        }),
+        credentials: "include",
+      }
+    );
+    const result = await response.json();
+    console.log(result);
   };
 
   return (
@@ -83,7 +99,11 @@ const SignupForm = () => {
             <FormItem>
               <FormLabel>password</FormLabel>
               <FormControl>
-                <Input placeholder="비밀번호를 입력하세요" {...field} />
+                <Input
+                  type="password"
+                  placeholder="비밀번호를 입력하세요"
+                  {...field}
+                />
               </FormControl>
               <FormDescription>
                 비밀번호는 1자리 이상이여야 합니다.

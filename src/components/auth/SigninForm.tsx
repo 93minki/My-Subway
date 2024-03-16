@@ -9,12 +9,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import useUserInfoStore from "@/stores/userInfo";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 
 const formSchema = z.object({
-  nickname: z.string().min(2, { message: "닉네임은 필수 항목입니다." }).max(20),
   email: z
     .string()
     .min(1, { message: "이메일은 필수 항목입니다." })
@@ -26,6 +27,10 @@ const formSchema = z.object({
 });
 
 const SigninForm = () => {
+  const setUserInfo = useUserInfoStore((state) => state.setUserInfo);
+  const userInfo = useUserInfoStore((state) => state.userInfo);
+  const navigate = useNavigate();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -34,9 +39,32 @@ const SigninForm = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     // 로그인 로직 추가
-    console.log(values);
+    const response = await fetch(
+      `${import.meta.env.VITE_API_ENDPOINT}/auth/signin`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: values.email,
+          password: values.password,
+        }),
+        credentials: "include",
+      }
+    );
+    const result = await response.json();
+    setUserInfo({
+      email: result.payload.email,
+      at: result.payload.at,
+    });
+    // TODO 저장 결과 확인을 위한 로그 삭제 예정
+    console.log(result, userInfo);
+    if (result.result === "success") {
+      navigate("/");
+    }
   };
 
   return (
@@ -69,7 +97,11 @@ const SigninForm = () => {
             <FormItem>
               <FormLabel>password</FormLabel>
               <FormControl>
-                <Input placeholder="비밀번호를 입력하세요" {...field} />
+                <Input
+                  type="password"
+                  placeholder="비밀번호를 입력하세요"
+                  {...field}
+                />
               </FormControl>
               <FormDescription>
                 비밀번호는 1자리 이상이여야 합니다.
