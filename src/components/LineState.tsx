@@ -109,7 +109,12 @@ const LineState = ({ lineList }: LineStateProps) => {
         <div className="flex overflow-auto items-start gap-4 w-full">
           {sortedUpLine.map((line) => {
             console.log("line", line);
-            return <Train key={Number(line.btrainNo)} trainInfo={line} />;
+            return (
+              <Train
+                key={Number(line.btrainNo) * Math.random()}
+                trainInfo={line}
+              />
+            );
           })}
         </div>
         <div className="w-full flex justify-between relative mt-10">
@@ -120,7 +125,7 @@ const LineState = ({ lineList }: LineStateProps) => {
                 line.arvlMsg3 === station ? (
                   <TbTrain
                     className="absolute top-[-20px] left-[37px]"
-                    key={Number(line.btrainNo)}
+                    key={Number(line.btrainNo) * Math.random()}
                   />
                 ) : (
                   ""
@@ -171,7 +176,7 @@ const LineState = ({ lineList }: LineStateProps) => {
               {sortedDownLine.map((line) =>
                 line.arvlMsg3 === station ? (
                   <TbTrain
-                    key={line.btrainNo}
+                    key={Number(line.btrainNo) * Math.random()}
                     className="absolute top-[-20px] left-[37px]"
                   />
                 ) : (
