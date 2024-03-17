@@ -1,13 +1,16 @@
 const useSubscriptionStatus = () => {
   const CheckSubscriptionStatus = async (subscription: PushSubscription) => {
+    const accessToken = localStorage.getItem("at");
     const resposne = await fetch(
       `${import.meta.env.VITE_API_ENDPOINT}/subscribe/check`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({ subscription }),
+        credentials: "include",
       }
     );
 
