@@ -59,6 +59,8 @@ const SigninForm = () => {
     setUserInfo({
       email: result.payload.email,
       at: result.payload.at,
+      id: result.payload.id,
+      nickname: result.payload.nickname,
     });
     localStorage.setItem("at", result.payload.at);
     // TODO 저장 결과 확인을 위한 로그 삭제 예정

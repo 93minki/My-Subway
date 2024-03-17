@@ -1,40 +1,17 @@
-import useSearchResultStore from "@/stores/searchResult";
-import { useCallback, useEffect, useRef } from "react";
+import { useWebSocket } from "@/provider/WebSocketProvider";
+import { useCallback } from "react";
 
 const useSearchByWebsocket = () => {
-  const setSearchResult = useSearchResultStore(
-    (state) => state.setSearchResult
-  );
-  const ws = useRef<WebSocket | null>(null);
-
-  useEffect(() => {
-    ws.current = new WebSocket(`${import.meta.env.VITE_WS_ENDPOINT}`);
-    ws.current.onmessage = (event) => {
-      const message = JSON.parse(event.data);
-      console.log("message?", JSON.parse(event.data));
-      setSearchResult(message);
-    };
-
-    ws.current.onerror = (event) => {
-      console.error("Websocket Error: ", event);
-    };
-
-    ws.current.onclose = (event) => {
-      console.log("WebSocket Connection Closed", event);
-    };
-
-    return () => {
-      ws.current?.close();
-    };
-  }, [setSearchResult]);
+  const ws = useWebSocket();
 
   const sendTrackSubwayInfo = useCallback(
-    (data: { type: string; subwayNumber: string }) => {
+    (data: { type: string; subwayNumber: string; userId: string; searchWord: string }) => {
+      console.log("data", data);
       if (ws.current?.readyState === WebSocket.OPEN) {
         ws.current.send(JSON.stringify(data));
       }
     },
-    []
+    [ws]
   );
 
   const sendSearchWord = useCallback(
@@ -43,7 +20,7 @@ const useSearchByWebsocket = () => {
         ws.current.send(JSON.stringify(data));
       }
     },
-    []
+    [ws]
   );
 
   return { sendTrackSubwayInfo, sendSearchWord };

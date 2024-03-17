@@ -1,4 +1,5 @@
 import useSearchByWebsocket from "@/hooks/useSearchByWebSocket";
+import useSearchWordStore from "@/stores/searchWord";
 import { ChangeEvent, useState } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -6,6 +7,7 @@ import { Input } from "./ui/input";
 const SearchBar = () => {
   const [searchWord, setSearchWord] = useState("");
   const { sendSearchWord } = useSearchByWebsocket();
+  const setSearchWord_z = useSearchWordStore((state) => state.setSearchWord_z);
 
   const inputOnChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchWord(e.target.value);
@@ -18,6 +20,7 @@ const SearchBar = () => {
       setSearchWord("");
     }
     // searchSubway(searchWord);
+    setSearchWord_z(searchWord);
     sendSearchWord({ type: "search", searchWord });
   };
   return (

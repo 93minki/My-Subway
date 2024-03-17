@@ -1,4 +1,6 @@
-import useTrackSubway from "@/hooks/useTrackSubway";
+import useSearchByWebsocket from "@/hooks/useSearchByWebSocket";
+import useSearchWordStore from "@/stores/searchWord";
+import useUserInfoStore from "@/stores/userInfo";
 import { realTimeArrivalListType } from "@/types/ResponseType";
 import { Button } from "./ui/button";
 import {
@@ -29,18 +31,24 @@ const arrivalCode: { [key: string]: string } = {
 
 const Train = ({ trainInfo }: TrainProps) => {
   const { subwayId, btrainNo } = trainInfo;
-  const { trackSubway } = useTrackSubway();
-
+  // const { trackSubway } = useTrackSubway();
+  const { sendTrackSubwayInfo } = useSearchByWebsocket();
+  const searchWord = useSearchWordStore((state) => state.searchWord);
+  const userInfo = useUserInfoStore((state) => state.userInfo);
   const onClickHandler = () => {
-    trackSubway(btrainNo);
+    // trackSubway(btrainNo);
+    sendTrackSubwayInfo({
+      type: "subway",
+      subwayNumber: btrainNo,
+      userId: userInfo.id,
+      searchWord: searchWord,
+    });
   };
 
   return (
     <div
       className={`flex min-w-[200px] flex-col gap-4 border border-${subwayId} border-opacity-25 border shadow-lg p-2 rounded-md`}
-      onClick={() => {
-        console.log("hello");
-      }}
+      onClick={() => {}}
     >
       <div className="flex gap-2">
         <span>{trainInfo.trainLineNm.split("-")[0]}</span>

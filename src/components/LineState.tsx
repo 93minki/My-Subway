@@ -108,7 +108,6 @@ const LineState = ({ lineList }: LineStateProps) => {
         </div>
         <div className="flex overflow-auto items-start gap-4 w-full">
           {sortedUpLine.map((line) => {
-            console.log("line", line);
             return (
               <Train
                 key={Number(line.btrainNo) * Math.random()}

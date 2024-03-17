@@ -1,5 +1,13 @@
-const authCheckFunc = async () => {
+type authCheckFuncProps = (result: {
+  email: string;
+  at: string;
+  id: string;
+  nickname: string;
+}) => void;
+
+const authCheckFunc = async (setUserInfo: authCheckFuncProps) => {
   const accessToken = localStorage.getItem("at");
+
   if (!accessToken) return false;
 
   const response = await fetch(`${import.meta.env.VITE_API_ENDPOINT}/user/me`, {
@@ -12,6 +20,18 @@ const authCheckFunc = async () => {
   });
 
   const userInfo = await response.json();
+
+  localStorage.setItem("at", userInfo.payload.at);
+  setUserInfo({
+    email: userInfo.payload.user.email,
+    at: userInfo.payload.at,
+    id: userInfo.payload.user.id,
+    nickname: userInfo.payload.user.nickname,
+  });
+
+  // TODO
+  // access token이 변경되었을 때 로컬 스토리지에 저장해줘야 함
+  // 유저 정보가 있으 경우 유저 정보를 저장해줘야 함
   console.log("userInfo", userInfo.result === "success");
 
   return userInfo.result === "success" ? true : false;
