@@ -89,16 +89,8 @@ export default function Home() {
 
   const subscribeUser = async (swReg: ServiceWorkerRegistration) => {
     const subscription = await swReg.pushManager.getSubscription();
-    console.log("subscription~~~~~~", subscription);
-    // 여기서 구독 정보가 있다는 것은 이미 클라이언트는 푸시 서비스를 구독중이라는 뜻임
-    // 하지만 그 구독 정보가 서버에 있다는 보장이 없는 상태
-    // 따라서 여기에서 서버에 구독정보가 있는지 체크를 해야 함.
-
     if (subscription) {
-      console.log("이미 구독중임!", subscription);
-
       const subscriptionStatus = await CheckSubscriptionStatus(subscription);
-      console.log("서버에 구독 정보가 있는지 여부", subscriptionStatus);
       if (!subscriptionStatus) {
         // 구독 상태이지만 서버에는 정보가 없음
         // 연결을 해제하고 다시 구독해야 함.
@@ -119,12 +111,16 @@ export default function Home() {
       .then((subscription: PushSubscription) => {
         console.log("User is subscribed:", subscription);
         setUserSubscriptionInfo(subscription);
+        const accessToken = localStorage.getItem("at");
+
         fetch(`${import.meta.env.VITE_API_ENDPOINT}/subscribe`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
           },
           body: JSON.stringify(subscription),
+          credentials: "include",
         })
           .then((response) => {
             if (!response.ok) {

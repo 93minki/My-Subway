@@ -1,11 +1,13 @@
-import useSearch from "@/hooks/useSearch";
+import useSearchByWebsocket from "@/hooks/useSearchByWebSocket";
+import useSearchWordStore from "@/stores/searchWord";
 import { ChangeEvent, useState } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 
 const SearchBar = () => {
   const [searchWord, setSearchWord] = useState("");
-  const { searchSubway, closeConnection } = useSearch();
+  const { sendSearchWord } = useSearchByWebsocket();
+  const setSearchWord_z = useSearchWordStore((state) => state.setSearchWord_z);
 
   const inputOnChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchWord(e.target.value);
@@ -17,14 +19,12 @@ const SearchBar = () => {
       alert("검색어를 입력하세요");
       setSearchWord("");
     }
-    // NOTE 검색어로 검색 실행 후 zustand store에 결과값 저장
-    searchSubway(searchWord);
+    // searchSubway(searchWord);
+    setSearchWord_z(searchWord);
+    sendSearchWord({ type: "search", searchWord });
   };
   return (
     <div className="flex flex-col gap-4">
-      <Button type="button" onClick={closeConnection}>
-        알림 끄기
-      </Button>
       <div id="search-bar" className="flex max-w-[390px] w-full m-auto gap-2">
         <Input
           type="text"

@@ -19,7 +19,6 @@ const subwayInfo: SubwayInfoType = info;
 
 const SubwayState = () => {
   const searchResult = useSearchResultStore((state) => state.searchResult);
-  console.log("searchResult 검색 결과 원본 데이터", searchResult);
 
   const [isError, setIsError] = useState(false);
   const [errMsg, setErrMsg] = useState("");
