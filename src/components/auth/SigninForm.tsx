@@ -28,7 +28,6 @@ const formSchema = z.object({
 
 const SigninForm = () => {
   const setUserInfo = useUserInfoStore((state) => state.setUserInfo);
-  const userInfo = useUserInfoStore((state) => state.userInfo);
   const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -63,8 +62,7 @@ const SigninForm = () => {
       nickname: result.payload.nickname,
     });
     localStorage.setItem("at", result.payload.at);
-    // TODO 저장 결과 확인을 위한 로그 삭제 예정
-    console.log(result, userInfo);
+
     if (result.result === "success") {
       navigate("/");
     }
@@ -114,6 +112,14 @@ const SigninForm = () => {
           )}
         />
         <Button type="submit">로그인</Button>
+        <Button
+          type="button"
+          onClick={() => {
+            navigate("/signup");
+          }}
+        >
+          회원가입
+        </Button>
       </form>
     </Form>
   );

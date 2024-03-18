@@ -11,6 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 
 const formSchema = z.object({
@@ -26,6 +27,7 @@ const formSchema = z.object({
 });
 
 const SignupForm = () => {
+  const navigate = useNavigate();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -54,6 +56,9 @@ const SignupForm = () => {
     );
     const result = await response.json();
     console.log(result);
+    if (result.result === "success") {
+      navigate("/signin");
+    }
   };
 
   return (
