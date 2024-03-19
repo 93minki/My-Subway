@@ -4,103 +4,12 @@ import SearchBar from "@/components/SearchBar";
 import SubwayState from "@/components/SubwayState";
 import { Button } from "@/components/ui/button";
 import useInstallPWA from "@/hooks/useInstallPWA";
-import useSubscriptionStatus from "@/hooks/useSubscriptionStatus";
-import useSearchResultStore from "@/stores/searchResult";
-import { useEffect } from "react";
+import useServiceWorkerRegist from "@/hooks/useServiceWorkerRegist";
 
 export default function Home() {
-  const setUserSubscriptionInfo = useSearchResultStore(
-    (state) => state.setUserSubscriptionInfo
-  );
   const { isInstallable, showInstallPrompt } = useInstallPWA();
 
-  const { CheckSubscriptionStatus } = useSubscriptionStatus();
-
-  const unSubscribeUser = async (subscription: PushSubscription) => {
-    const unSubscribeStatus = await subscription.unsubscribe();
-    if (unSubscribeStatus) {
-      console.log("구독 취소에 성공하였습니다.");
-    } else {
-      console.log("구독 취소에 실패하였습니다.");
-    }
-  };
-
-  useEffect(() => {
-    console.log("service worker supported", "serviceWorker" in navigator);
-    console.log("PushManager supported", "PushManager" in window);
-
-    if ("serviceWorker" in navigator && "PushManager" in window) {
-      console.log("Service Worker and Push is supported");
-
-      navigator.serviceWorker
-        .register("/sw.js")
-        .then((swReg: ServiceWorkerRegistration) => {
-          console.log("Service Worker is registered", swReg);
-          subscribeUser(swReg);
-        })
-        .catch((error: any) => {
-          console.error("Service Worker Error", error);
-        });
-    } else {
-      console.warn("Push messaging is not supported");
-    }
-  }, []);
-
-  const subscribeUser = async (swReg: ServiceWorkerRegistration) => {
-    const subscription = await swReg.pushManager.getSubscription();
-    if (subscription) {
-      const subscriptionStatus = await CheckSubscriptionStatus(subscription);
-      if (!subscriptionStatus) {
-        // 구독 상태이지만 서버에는 정보가 없음
-        // 연결을 해제하고 다시 구독해야 함.
-        unSubscribeUser(subscription);
-      } else {
-        setUserSubscriptionInfo(subscription);
-        return;
-      }
-    }
-
-    const applicationServerKey = import.meta.env.VITE_VAPID_PUBLIC_KEY;
-
-    swReg.pushManager
-      .subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: applicationServerKey,
-      })
-      .then((subscription: PushSubscription) => {
-        console.log("User is subscribed:", subscription);
-        setUserSubscriptionInfo(subscription);
-        const accessToken = localStorage.getItem("at");
-
-        fetch(`${import.meta.env.VITE_API_ENDPOINT}/subscribe`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-          body: JSON.stringify(subscription),
-          credentials: "include",
-        })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error("Network response was not ok");
-            }
-            return response.json();
-          })
-          .then((data) => {
-            console.log(
-              "Subscription was successfully sent to the server:",
-              data
-            );
-          })
-          .catch((error) => {
-            console.error("Failed to send subscription to server:", error);
-          });
-      })
-      .catch((err: any) => {
-        console.log("Failed to subscribe the user: ", err);
-      });
-  };
+  useServiceWorkerRegist();
 
   const requestPushPermission = () => {
     Notification.requestPermission().then((permission) => {
