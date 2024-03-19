@@ -21,7 +21,11 @@ const authCheckFunc = async (setUserInfo: authCheckFuncProps) => {
 
   const userInfo = await response.json();
 
-  localStorage.setItem("at", userInfo.payload.at);
+  if (userInfo.payload.at) {
+    localStorage.setItem("at", userInfo.payload.at);
+  }
+  console.log("userInfo", userInfo);
+
   setUserInfo({
     email: userInfo.payload.user.email,
     at: userInfo.payload.at,

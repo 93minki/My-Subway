@@ -1,4 +1,5 @@
 import useSearchResultStore from "@/stores/searchResult";
+import useTrackSubwayStore from "@/stores/trackSubway";
 import React, { createContext, useContext, useEffect, useRef } from "react";
 
 // WebSocketContext에 대한 TypeScript 타입을 정의합니다.
@@ -18,15 +19,22 @@ export const WebSocketProvider = ({
   const setSearchResult = useSearchResultStore(
     (state) => state.setSearchResult
   );
+  const setSubwayNumber = useTrackSubwayStore((state) => state.setSubwayNumber);
   useEffect(() => {
     if (!ws.current) {
       console.log("연결 시도");
       ws.current = new WebSocket(`${import.meta.env.VITE_WS_ENDPOINT}`);
 
       ws.current.onmessage = (event) => {
-        const message = JSON.parse(event.data);
-        console.log("message?", message);
-        setSearchResult(message);
+        const responseAll = JSON.parse(event.data);
+        console.log("responseAll", responseAll);
+
+        const subwayData = responseAll.subwayData;
+        if (responseAll.stopMessage !== "") {
+          // stopMessage가 존재함
+          setSubwayNumber("");
+        }
+        setSearchResult(subwayData);
       };
 
       ws.current.onerror = (event) => {
