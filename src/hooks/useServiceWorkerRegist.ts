@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import useSubscriptionInfoStore from "@/stores/subscriptionInfo";
 import { useCallback, useEffect } from "react";
 import useSubscriptionStatus from "./useSubscriptionStatus";

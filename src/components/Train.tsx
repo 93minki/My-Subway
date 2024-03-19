@@ -1,5 +1,6 @@
 import useSearchByWebsocket from "@/hooks/useSearchByWebSocket";
 import useSearchWordStore from "@/stores/searchWord";
+import useTrackSubwayStore from "@/stores/trackSubway";
 import useUserInfoStore from "@/stores/userInfo";
 import { realTimeArrivalListType } from "@/types/ResponseType";
 import { Button } from "./ui/button";
@@ -31,12 +32,14 @@ const arrivalCode: { [key: string]: string } = {
 
 const Train = ({ trainInfo }: TrainProps) => {
   const { subwayId, btrainNo } = trainInfo;
-  // const { trackSubway } = useTrackSubway();
   const { sendTrackSubwayInfo } = useSearchByWebsocket();
   const searchWord = useSearchWordStore((state) => state.searchWord);
   const userInfo = useUserInfoStore((state) => state.userInfo);
+  const setSubwayNumber = useTrackSubwayStore((state) => state.setSubwayNumber);
+  const selectedSubway = useTrackSubwayStore((state) => state.subwayNumber);
+
   const onClickHandler = () => {
-    // trackSubway(btrainNo);
+    setSubwayNumber(btrainNo);
     sendTrackSubwayInfo({
       type: "subway",
       subwayNumber: btrainNo,
@@ -47,7 +50,9 @@ const Train = ({ trainInfo }: TrainProps) => {
 
   return (
     <div
-      className={`flex min-w-[200px] flex-col gap-4 border border-${subwayId} border-opacity-25 border shadow-lg p-2 rounded-md`}
+      className={`flex min-w-[200px] flex-col gap-4 border border-${subwayId} border-opacity-25 border shadow-lg p-2 rounded-md ${
+        selectedSubway === btrainNo ? `bg-${subwayId}` : ""
+      }`}
       onClick={() => {}}
     >
       <div className="flex gap-2">
