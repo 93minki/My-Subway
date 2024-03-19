@@ -5,6 +5,7 @@ import SubwayState from "@/components/SubwayState";
 import { Button } from "@/components/ui/button";
 import useInstallPWA from "@/hooks/useInstallPWA";
 import useServiceWorkerRegist from "@/hooks/useServiceWorkerRegist";
+import { isSafari } from "react-device-detect";
 
 export default function Home() {
   const { isInstallable, showInstallPrompt } = useInstallPWA();
@@ -12,6 +13,7 @@ export default function Home() {
   useServiceWorkerRegist();
 
   const userAgent = window.navigator.userAgent.toLowerCase();
+  console.log("userAgent", userAgent);
   const requestPushPermission = () => {
     Notification.requestPermission().then((permission) => {
       if (permission === "granted") {
@@ -30,7 +32,7 @@ export default function Home() {
       <div className="flex flex-col justify-center">
         {Notification.permission !== "granted" && (
           <>
-            {userAgent.includes("safari") && (
+            {isSafari && (
               <span className="self-center text-sm text-red-500">
                 iOS는 반드시 알림 허용 버튼을 눌러야 합니다.
               </span>
