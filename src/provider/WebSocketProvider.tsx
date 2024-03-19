@@ -42,7 +42,7 @@ export const WebSocketProvider = ({
       console.log("WebSocket Connection Closed", event);
       ws.current = null;
     };
-  }, [setSearchResult]);
+  }, []);
 
   const handleVisibilityChange = useCallback(() => {
     if (document.visibilityState === "visible" && !ws.current) {

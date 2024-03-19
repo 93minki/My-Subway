@@ -18,7 +18,11 @@ interface SubwayInfoType {
 const subwayInfo: SubwayInfoType = info;
 
 const SubwayState = () => {
-  const searchResult = useSearchResultStore((state) => state.searchResult);
+  const storedSearchResult = useSearchResultStore(
+    (state) => state.searchResult
+  );
+  const searchResult = storedSearchResult.subwayData;
+  console.log("search Reuslt", searchResult);
 
   const [isError, setIsError] = useState(false);
   const [errMsg, setErrMsg] = useState("");
