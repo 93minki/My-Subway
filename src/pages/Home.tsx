@@ -12,8 +12,6 @@ export default function Home() {
 
   useServiceWorkerRegist();
 
-  const userAgent = window.navigator.userAgent.toLowerCase();
-  console.log("userAgent", userAgent);
   const requestPushPermission = () => {
     Notification.requestPermission().then((permission) => {
       if (permission === "granted") {
