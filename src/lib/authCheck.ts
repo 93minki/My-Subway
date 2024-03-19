@@ -24,6 +24,7 @@ const authCheckFunc = async (setUserInfo: authCheckFuncProps) => {
   if (userInfo.payload.at) {
     localStorage.setItem("at", userInfo.payload.at);
   }
+  console.log("userInfo", userInfo);
 
   setUserInfo({
     email: userInfo.payload.user.email,

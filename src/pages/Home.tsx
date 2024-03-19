@@ -11,6 +11,7 @@ export default function Home() {
 
   useServiceWorkerRegist();
 
+  const userAgent = window.navigator.userAgent.toLowerCase();
   const requestPushPermission = () => {
     Notification.requestPermission().then((permission) => {
       if (permission === "granted") {
@@ -26,7 +27,19 @@ export default function Home() {
       {isInstallable && (
         <Button onClick={showInstallPrompt}>PWA를 설치하세용</Button>
       )}
-      <Button onClick={requestPushPermission}>푸시 알림 허용</Button>
+      <div className="flex flex-col justify-center">
+        {Notification.permission !== "granted" && (
+          <>
+            {userAgent.includes("safari") && (
+              <span className="self-center text-sm text-red-500">
+                iOS는 반드시 알림 허용 버튼을 눌러야 합니다.
+              </span>
+            )}
+            <Button onClick={requestPushPermission}>푸시 알림 허용</Button>
+          </>
+        )}
+      </div>
+
       <SearchBar />
       <SubwayState />
     </div>
