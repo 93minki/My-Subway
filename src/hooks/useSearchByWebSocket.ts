@@ -1,11 +1,16 @@
-import { useWebSocket } from "@/provider/WebSocketProvider";
 import { useCallback } from "react";
+import useWebSocket from "./useWebSocket";
 
 const useSearchByWebsocket = () => {
   const ws = useWebSocket();
 
   const sendTrackSubwayInfo = useCallback(
-    (data: { type: string; subwayNumber: string; userId: string; searchWord: string }) => {
+    (data: {
+      type: string;
+      subwayNumber: string;
+      userId: string;
+      searchWord: string;
+    }) => {
       console.log("data", data);
       if (ws.current?.readyState === WebSocket.OPEN) {
         ws.current.send(JSON.stringify(data));

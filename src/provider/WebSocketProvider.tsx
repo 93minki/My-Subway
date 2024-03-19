@@ -3,7 +3,6 @@ import React, {
   MutableRefObject,
   createContext,
   useCallback,
-  useContext,
   useEffect,
   useRef,
 } from "react";
@@ -12,7 +11,9 @@ interface WebSocketContextType {
   ws: MutableRefObject<WebSocket | null>;
 }
 
-const WebSocketContext = createContext<WebSocketContextType | null>(null);
+export const WebSocketContext = createContext<WebSocketContextType | null>(
+  null
+);
 
 export const WebSocketProvider = ({
   children,
@@ -62,19 +63,9 @@ export const WebSocketProvider = ({
     };
   }, [handleVisibilityChange, initializeWebSocket]);
 
-  // context 값에는 ws를 포함하는 객체를 전달합니다.
   return (
     <WebSocketContext.Provider value={{ ws }}>
       {children}
     </WebSocketContext.Provider>
   );
-};
-
-// 이 훅은 WebSocket 인스턴스를 반환합니다.
-export const useWebSocket = (): React.MutableRefObject<WebSocket | null> => {
-  const context = useContext(WebSocketContext);
-  if (context === null) {
-    throw new Error("useWebSocket must be used within a WebSocketProvider");
-  }
-  return context.ws;
 };
