@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import SearchBar from "@/components/SearchBar";
-import SubwayState from "@/components/SubwayState";
+import SubwayLineTabs from "@/components/SubwayLineTabs";
 import { Button } from "@/components/ui/button";
 import useInstallPWA from "@/hooks/useInstallPWA";
 import useServiceWorkerRegist from "@/hooks/useServiceWorkerRegist";
@@ -43,7 +43,7 @@ export default function Home() {
       </div>
 
       <SearchBar />
-      <SubwayState />
+      <SubwayLineTabs />
     </div>
   );
 }
