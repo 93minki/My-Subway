@@ -1,8 +1,8 @@
 import useSearchResultStore from "@/stores/searchResult";
+import type { realTimeArrivalListType } from "@/types/ResponseType";
 import { useEffect, useState } from "react";
 import info from "../subway_info.json";
-import type { realTimeArrivalListType } from "../types/ResponseType";
-import LineState from "./LineState";
+import SubwayLineInfo from "./SubwayLineInfo";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 
 interface SubwayInfoType {
@@ -17,12 +17,11 @@ interface SubwayInfoType {
 
 const subwayInfo: SubwayInfoType = info;
 
-const SubwayState = () => {
+const SubwayLineTabs = () => {
   const storedSearchResult = useSearchResultStore(
     (state) => state.searchResult
   );
   const searchResult = storedSearchResult.subwayData;
-  console.log("search Reuslt", searchResult);
 
   const [isError, setIsError] = useState(false);
   const [errMsg, setErrMsg] = useState("");
@@ -72,11 +71,11 @@ const SubwayState = () => {
       </TabsList>
       {Object.keys(subwayObject).map((list) => (
         <TabsContent key={Math.random()} value={list}>
-          <LineState lineList={subwayObject[list]} />
+          <SubwayLineInfo lineList={subwayObject[list]} />
         </TabsContent>
       ))}
     </Tabs>
   );
 };
 
-export default SubwayState;
+export default SubwayLineTabs;

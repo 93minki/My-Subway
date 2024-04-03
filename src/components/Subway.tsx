@@ -14,8 +14,8 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 
-interface TrainProps {
-  trainInfo: realTimeArrivalListType;
+interface SubwayProps {
+  subwayInfo: realTimeArrivalListType;
 }
 
 const arrivalCode: { [key: string]: string } = {
@@ -30,8 +30,8 @@ const arrivalCode: { [key: string]: string } = {
 
 // API 필요 클릭했을 때 구독 요청을 보내야 함
 
-const Train = ({ trainInfo }: TrainProps) => {
-  const { subwayId, btrainNo } = trainInfo;
+const Subway = ({ subwayInfo }: SubwayProps) => {
+  const { subwayId, btrainNo } = subwayInfo;
   const { sendTrackSubwayInfo } = useSearchByWebsocket();
   const searchWord = useSearchWordStore((state) => state.searchWord);
   const userInfo = useUserInfoStore((state) => state.userInfo);
@@ -56,12 +56,12 @@ const Train = ({ trainInfo }: TrainProps) => {
       onClick={() => {}}
     >
       <div className="flex gap-2">
-        <span>{trainInfo.trainLineNm.split("-")[0]}</span>
-        <span>({trainInfo.btrainSttus})</span>
+        <span>{subwayInfo.trainLineNm.split("-")[0]}</span>
+        <span>({subwayInfo.btrainSttus})</span>
       </div>
       <div className="flex gap-2">
-        <span>{trainInfo.arvlMsg3}</span>
-        <span>[{arrivalCode[trainInfo.arvlCd]}]</span>
+        <span>{subwayInfo.arvlMsg3}</span>
+        <span>[{arrivalCode[subwayInfo.arvlCd]}]</span>
       </div>
       <Dialog>
         <DialogTrigger>등록하기</DialogTrigger>
@@ -83,4 +83,4 @@ const Train = ({ trainInfo }: TrainProps) => {
   );
 };
 
-export default Train;
+export default Subway;
