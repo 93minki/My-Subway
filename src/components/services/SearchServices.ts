@@ -5,10 +5,10 @@ export const loadSearchHistory = () => {
 
 export const saveSearchWord = (searchWord: string) => {
   const history = loadSearchHistory();
-  if(!history.includes(searchWord)) {
+  if (!history.includes(searchWord)) {
     const updateHistory = [...history, searchWord].slice(-5);
-    localStorage.setItem('searchWord', updateHistory.join(','));
-    return updateHistory
+    localStorage.setItem("searchWord", updateHistory.join(","));
+    return updateHistory;
   }
-  return history
-}
+  return history;
+};

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import SearchBar from "@/components/SearchBar";
+import SearchHistory from "@/components/SearchHistory";
 import SubwayLineTabs from "@/components/SubwayLineTabs";
 import { Button } from "@/components/ui/button";
 import useInstallPWA from "@/hooks/useInstallPWA";
@@ -41,8 +42,10 @@ export default function Home() {
           </>
         )}
       </div>
-
-      <SearchBar />
+      <div className="flex flex-col gap-4">
+        <SearchBar />
+        <SearchHistory />
+      </div>
       <SubwayLineTabs />
     </div>
   );
