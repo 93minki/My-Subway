@@ -1,68 +1,37 @@
+import useSearchBar from "@/hooks/useSearchBar";
 import useSearchByWebsocket from "@/hooks/useSearchByWebSocket";
-import useSearchWordStore from "@/stores/searchWord";
-import { ChangeEvent, useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 
 const SearchBar = () => {
-  const [searchWord, setSearchWord] = useState("");
-  const { sendSearchWord } = useSearchByWebsocket();
-  const setSearchWord_z = useSearchWordStore((state) => state.setSearchWord_z);
+  const {
+    searchWord,
+    initializeSearchHistory,
+    handleSearch,
+    searchHistory,
+    setSearchWord,
+  } = useSearchBar();
 
-  const [searchHistory, setSearchHistory] = useState<string[]>([]);
+  const { sendSearchWord } = useSearchByWebsocket();
 
   useEffect(() => {
-    const storagedSearchWord = localStorage.getItem("searchWord");
-    if (storagedSearchWord) {
-      const splitStorageItem = storagedSearchWord.split(",");
-      setSearchHistory(splitStorageItem);
-    } else {
-      localStorage.setItem("searchWord", "");
-    }
-  }, []);
+    initializeSearchHistory();
+  }, [initializeSearchHistory]);
 
-  const inputOnChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchWord(e.target.value);
-  };
-
-  const buttonOnClickHandler = async () => {
-    if (searchWord.trim().length < 1) {
-      alert("검색어를 입력하세요");
-      setSearchWord("");
-    }
-    setSearchWord_z(searchWord);
-    sendSearchWord({ type: "search", searchWord });
-
-    const storagedSearchWord = localStorage.getItem("searchWord");
-
-    if (storagedSearchWord) {
-      const splitStorageItem = storagedSearchWord.split(",");
-      if (!splitStorageItem.includes(searchWord)) {
-        splitStorageItem.push(searchWord);
-
-        const updatedArray =
-          splitStorageItem.length > 5
-            ? splitStorageItem.slice(1)
-            : splitStorageItem;
-
-        localStorage.setItem("searchWord", updatedArray.join(","));
-        setSearchHistory(updatedArray);
-      }
-    } else {
-      localStorage.setItem("searchWord", searchWord);
-      setSearchHistory([searchWord]);
-    }
-  };
   return (
     <div className="flex flex-col gap-4">
       <div id="search-bar" className="flex max-w-[390px] w-full m-auto gap-2">
         <Input
           type="text"
           placeholder="write subway name"
-          onChange={inputOnChangeHandler}
+          onChange={(e) => {
+            setSearchWord(e.target.value);
+            sendSearchWord({ type: "search", searchWord: e.target.value });
+          }}
           value={searchWord}
         />
-        <Button type="button" onClick={buttonOnClickHandler}>
+        <Button type="button" onClick={handleSearch}>
           Search
         </Button>
       </div>
