@@ -1,18 +1,15 @@
-import useSearchHistory from "@/hooks/useSearchHistory";
-import { useEffect } from "react";
+import useSearchWordStore from "@/stores/searchWord";
 import { Button } from "./ui/button";
 
 const SearchHistory = () => {
-  const { searchHistory, initializeSearchHistory, setSearchWord } =
-    useSearchHistory();
-
-  useEffect(() => {
-    initializeSearchHistory();
-  }, []);
+  const setSearchWord = useSearchWordStore((state) => state.setSearchWord);
+  const searchWordHistory = useSearchWordStore(
+    (state) => state.searchWordHistory
+  );
 
   return (
     <div className="flex gap-4">
-      {searchHistory.map((history) => (
+      {searchWordHistory.map((history) => (
         <Button
           key={history}
           className="bg-gray-500 text-sm"
