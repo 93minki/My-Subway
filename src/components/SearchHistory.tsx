@@ -21,9 +21,8 @@ const SearchHistory = () => {
   return (
     <div className="flex gap-4">
       {searchWordHistory.map((history) => (
-        <div className="relative group">
+        <div className="relative group" key={history}>
           <Button
-            key={history}
             className="bg-gray-500 text-sm"
             onClick={() => {
               setSearchWord(history);

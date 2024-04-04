@@ -21,7 +21,6 @@ const SubwayLineDirection = ({
   nextStation,
   sortedLine,
 }: SubwayLineDirectionProps) => {
-  console.log("dir", direction);
   return (
     <div className="flex flex-col max-w-[390px] w-full m-auto justify-center items-center gap-4">
       <span className="text-2xl ">{direction}</span>

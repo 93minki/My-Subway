@@ -11,7 +11,6 @@ const useSearchByWebsocket = () => {
       userId: string;
       searchWord: string;
     }) => {
-      console.log("data", data);
       if (ws.current?.readyState === WebSocket.OPEN) {
         ws.current.send(JSON.stringify(data));
       }
