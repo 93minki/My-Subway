@@ -6,6 +6,7 @@ import useSearchWordStore from "@/stores/searchWord";
 import { useState } from "react";
 import useSearchByWebsocket from "./useSearchByWebSocket";
 
+
 const useSearchBar = () => {
   const [searchWord, setSearchWord] = useState("");
   const [searchHistory, setSearchHistory] = useState<string[]>([]);

@@ -1,5 +1,4 @@
 import useSearchBar from "@/hooks/useSearchBar";
-import useSearchByWebsocket from "@/hooks/useSearchByWebSocket";
 import { useEffect } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -13,8 +12,6 @@ const SearchBar = () => {
     setSearchWord,
   } = useSearchBar();
 
-  const { sendSearchWord } = useSearchByWebsocket();
-
   useEffect(() => {
     initializeSearchHistory();
   }, [initializeSearchHistory]);
@@ -27,7 +24,6 @@ const SearchBar = () => {
           placeholder="write subway name"
           onChange={(e) => {
             setSearchWord(e.target.value);
-            sendSearchWord({ type: "search", searchWord: e.target.value });
           }}
           value={searchWord}
         />
