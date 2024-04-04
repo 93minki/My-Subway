@@ -1,3 +1,4 @@
+import useSubwayLineInfo from "@/hooks/useSubwayLineInfo";
 import { realTimeArrivalListType } from "@/types/ResponseType";
 import info from "../subway_info.json";
 import SubwayLineDirection from "./SubwayLineDirection";
@@ -18,30 +19,13 @@ interface SubwayInfoType {
 
 const subwayInfo: SubwayAllInfoType = info;
 
-const prevNextStation = (subwayJson: SubwayInfoType, stationId: string) => {
-  const stationKeys = Object.keys(subwayJson.station);
-  const stationIndex = stationKeys.indexOf(stationId);
-
-  const prevStationList: string[] = stationKeys
-    .slice(Math.max(0, stationIndex - 3), stationIndex)
-    .map((stKey) => subwayJson.station[stKey]);
-  prevStationList.push(subwayJson.station[stationId]);
-
-  const nextStationList: string[] = stationKeys
-    .slice(stationIndex + 1, stationIndex + 4)
-    .map((stKey) => subwayJson.station[stKey])
-    .reverse();
-  nextStationList.push(subwayJson.station[stationId]);
-
-  return { prevStationList, nextStationList };
-};
-
 const SubwayLineInfo = ({ lineList }: SubwayLineInfoProps) => {
   const subwayId = lineList[0].subwayId;
   const stationId = lineList[0].statnId;
   const subwayJson = subwayInfo[subwayId];
   const stationName = lineList[0].statnNm;
 
+  // 상행, 하행 구분하는 것은 도메인(비즈니스)로직이 될 수 없음.
   const { upLine, downLine } = lineList.reduce<{
     upLine: realTimeArrivalListType[];
     downLine: realTimeArrivalListType[];
@@ -64,25 +48,14 @@ const SubwayLineInfo = ({ lineList }: SubwayLineInfoProps) => {
   const down_prevStation = subwayJson.station[downLine[0].statnFid];
   const down_nextStation = subwayJson.station[downLine[0].statnTid];
 
-  const { prevStationList, nextStationList } = prevNextStation(
+  const { upDownLineList, sortLine } = useSubwayLineInfo();
+
+  const { downLineStations, upLineStations } = upDownLineList(
     subwayJson,
     stationId
   );
-
-  const sortedUpLine = upLine.sort((a, b) => {
-    const compare = Number(a.ordkey.slice(2, 5)) - Number(b.ordkey.slice(2, 5));
-    if (compare === 0) {
-      return Number(a.ordkey[1]) - Number(b.ordkey[1]);
-    }
-    return compare;
-  });
-  const sortedDownLine = downLine.sort((a, b) => {
-    const compare = Number(a.ordkey.slice(2, 5)) - Number(b.ordkey.slice(2, 5));
-    if (compare === 0) {
-      return Number(a.ordkey[1]) - Number(b.ordkey[1]);
-    }
-    return compare;
-  });
+  const sortedUpLine = sortLine(upLine);
+  const sortedDownLine = sortLine(downLine);
 
   return (
     <div className="flex flex-col gap-8">
@@ -91,7 +64,7 @@ const SubwayLineInfo = ({ lineList }: SubwayLineInfoProps) => {
         direction={upText}
         subwayId={subwayId}
         prevStation={up_prevStation}
-        nextStationList={nextStationList}
+        stationList={upLineStations}
         nextStation={up_nextStation}
         stationName={stationName}
         sortedLine={sortedUpLine}
@@ -101,7 +74,7 @@ const SubwayLineInfo = ({ lineList }: SubwayLineInfoProps) => {
         direction={downText}
         subwayId={subwayId}
         prevStation={down_prevStation}
-        nextStationList={prevStationList}
+        stationList={downLineStations}
         nextStation={down_nextStation}
         stationName={stationName}
         sortedLine={sortedDownLine}
