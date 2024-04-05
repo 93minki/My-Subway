@@ -3,13 +3,8 @@ import { VscError } from "react-icons/vsc";
 import { Button } from "./ui/button";
 
 const SearchHistory = () => {
-  const setSearchWord = useSearchWordStore((state) => state.setSearchWord);
-  const searchWordHistory = useSearchWordStore(
-    (state) => state.searchWordHistory
-  );
-  const setSearchWordHistory = useSearchWordStore(
-    (state) => state.setSearchWordHistory
-  );
+  const { setSearchWord, searchWordHistory, setSearchWordHistory } =
+    useSearchWordStore();
 
   const deleteSearchWordHistory = (station: string) => {
     const updateHistory = searchWordHistory.filter(

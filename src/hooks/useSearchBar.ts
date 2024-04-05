@@ -3,14 +3,8 @@ import useSearchByWebsocket from "./useSearchByWebSocket";
 
 const useSearchBar = () => {
   const { sendSearchWord } = useSearchByWebsocket();
-  const setSearchWord = useSearchWordStore((state) => state.setSearchWord);
-  const searchWord = useSearchWordStore((state) => state.searchWord);
-  const searchWordHistory = useSearchWordStore(
-    (state) => state.searchWordHistory
-  );
-  const setSearchWordHistory = useSearchWordStore(
-    (state) => state.setSearchWordHistory
-  );
+  const { setSearchWord, searchWord, searchWordHistory, setSearchWordHistory } =
+    useSearchWordStore();
 
   const handleSearch = async () => {
     // 검색 입력 제한 -> 도메인 로직
