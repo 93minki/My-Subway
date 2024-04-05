@@ -1,7 +1,4 @@
-import useSearchByWebsocket from "@/hooks/useSearchByWebSocket";
-import useSearchWordStore from "@/stores/searchWord";
-import useTrackSubwayStore from "@/stores/trackSubway";
-import useUserInfoStore from "@/stores/userInfo";
+import useSubway from "@/hooks/useSubway";
 import { realTimeArrivalListType } from "@/types/ResponseType";
 import { Button } from "./ui/button";
 import {
@@ -31,29 +28,15 @@ const arrivalCode: { [key: string]: string } = {
 // API 필요 클릭했을 때 구독 요청을 보내야 함
 
 const Subway = ({ subwayInfo }: SubwayProps) => {
-  const { subwayId, btrainNo } = subwayInfo;
-  const { sendTrackSubwayInfo } = useSearchByWebsocket();
-  const searchWord = useSearchWordStore((state) => state.searchWord);
-  const userInfo = useUserInfoStore((state) => state.userInfo);
-  const setSubwayNumber = useTrackSubwayStore((state) => state.setSubwayNumber);
-  const selectedSubway = useTrackSubwayStore((state) => state.subwayNumber);
-
-  const onClickHandler = () => {
-    setSubwayNumber(btrainNo);
-    sendTrackSubwayInfo({
-      type: "subway",
-      subwayNumber: btrainNo,
-      userId: userInfo.id,
-      searchWord: searchWord,
-    });
-  };
+  const { onClickHandler, isSubwaySelected } = useSubway(subwayInfo);
 
   return (
     <div
-      className={`flex min-w-[200px] flex-col gap-4 border border-${subwayId} border-opacity-25 border shadow-lg p-2 rounded-md ${
-        selectedSubway === btrainNo ? `bg-${subwayId}` : ""
+      className={`flex min-w-[200px] flex-col gap-4 border border-${
+        subwayInfo.subwayId
+      } border-opacity-25 border shadow-lg p-2 rounded-md ${
+        isSubwaySelected ? `bg-${subwayInfo.subwayId}` : ""
       }`}
-      onClick={() => {}}
     >
       <div className="flex gap-2">
         <span>{subwayInfo.trainLineNm.split("-")[0]}</span>
