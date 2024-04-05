@@ -2,8 +2,8 @@ import useSearchResultStore from "@/stores/searchResult";
 import type { realTimeArrivalListType } from "@/types/ResponseType";
 import { useEffect, useState } from "react";
 import info from "../subway_info.json";
-import SubwayLineInfo from "./SubwayLineInfo";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import SubwayLineInfo from "./SubwayLineInfo";
 
 interface SubwayInfoType {
   [key: string]: {

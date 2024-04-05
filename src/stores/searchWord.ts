@@ -2,12 +2,22 @@ import { create } from "zustand";
 
 interface SearchWordState {
   searchWord: string;
-  setSearchWord_z: (word: string) => void;
+  setSearchWord: (word: string) => void;
+  searchWordHistory: string[];
+  setSearchWordHistory: (histroy: string[]) => void;
 }
 
 const useSearchWordStore = create<SearchWordState>()((set) => ({
   searchWord: "",
-  setSearchWord_z: (word) => set({ searchWord: word }),
+  setSearchWord: (word) => set({ searchWord: word }),
+  searchWordHistory: localStorage.getItem("searchWord")?.split(",") || [],
+  setSearchWordHistory: (history) => set({ searchWordHistory: history }),
 }));
+
+useSearchWordStore.subscribe((state) => {
+  if (state.searchWordHistory) {
+    localStorage.setItem("searchWord", state.searchWordHistory?.join(","));
+  }
+});
 
 export default useSearchWordStore;

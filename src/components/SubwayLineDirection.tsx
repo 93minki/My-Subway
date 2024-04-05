@@ -7,7 +7,7 @@ interface SubwayLineDirectionProps {
   subwayId: string;
   prevStation: string;
   stationName: string;
-  nextStationList: string[];
+  stationList: string[];
   nextStation: string;
   sortedLine: realTimeArrivalListType[];
 }
@@ -17,11 +17,10 @@ const SubwayLineDirection = ({
   subwayId,
   prevStation,
   stationName,
-  nextStationList,
+  stationList,
   nextStation,
   sortedLine,
 }: SubwayLineDirectionProps) => {
-  console.log("dir", direction);
   return (
     <div className="flex flex-col max-w-[390px] w-full m-auto justify-center items-center gap-4">
       <span className="text-2xl ">{direction}</span>
@@ -49,7 +48,7 @@ const SubwayLineDirection = ({
       </div>
       <div className="w-full flex justify-between relative mt-10">
         <div className={`border-b-2 w-full absolute border-${subwayId}`} />
-        {nextStationList.map((station) => (
+        {stationList.map((station) => (
           <div
             className="relative p-2 w-1/4 flex justify-center"
             key={Math.random()}
