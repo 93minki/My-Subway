@@ -1,8 +1,9 @@
-export default {
+import type { JestConfigWithTsJest } from "ts-jest";
+
+const config: JestConfigWithTsJest = {
+  preset: "ts-jest",
   testEnvironment: "jsdom",
-  transform: {
-    "^.+\\.tsx?$": "ts-jest",
-  },
+  setupFilesAfterEnv: ["<rootDir>/jest-setup.ts"],
   moduleNameMapper: {
     "^.+\\.svg$": "jest-svg-transformer",
     "\\.(css|less|sass|scss)$": "identity-obj-proxy",
@@ -11,5 +12,10 @@ export default {
   },
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
   testPathIgnorePatterns: ["/node_modules/"],
-  setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
+  clearMocks: true,
+  collectCoverage: true,
+  coverageDirectory: "coverage",
+
 };
+
+export default config;

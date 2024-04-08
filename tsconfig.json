@@ -29,5 +29,5 @@
     "types": ["vite-plugin-pwa/client", "jest"],
     "esModuleInterop": true
   },
-  "include": ["src", "src/sw.js"]
+  "include": ["src", "src/sw.js", "**/*.tsx"]
 }
