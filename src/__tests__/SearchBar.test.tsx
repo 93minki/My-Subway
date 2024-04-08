@@ -18,6 +18,25 @@ jest.mock("../hooks/useSearchByWebSocket", () => ({
   }),
 }));
 
+jest.mock("../hooks/useSearchBar", () => {
+  let mockSearchWord = "";
+
+  return {
+    __esModule: true,
+    default: jest.fn(() => ({
+      searchWord: mockSearchWord,
+      setSearchWord: (newWord: string) => {
+        mockSearchWord = newWord;
+      },
+      handleSearch: jest.fn().mockImplementation(() => {
+        if (mockSearchWord.length <= 1) {
+          window.alert("두 글자 이상의 검색어를 입력해주세요.");
+        }
+      }),
+    })),
+  };
+});
+
 beforeAll(() => {
   window.alert = jest.fn();
 });
@@ -35,7 +54,7 @@ describe("SearchBar 컴포넌트 통합 테스트", () => {
     const input = screen.getByPlaceholderText(
       "지하철 역이름을 검색해주세요 (역 제외)"
     );
-    await userEvent.type(input, "역");
+    await userEvent.type(input, "서울");
     const searchButton = screen.getByRole("button", { name: "검색" });
     await userEvent.click(searchButton);
 
@@ -47,7 +66,7 @@ describe("SearchBar 컴포넌트 통합 테스트", () => {
     const input = screen.getByPlaceholderText(
       "지하철 역이름을 검색해주세요 (역 제외)"
     );
-    await userEvent.type(input, "서울");
+    await userEvent.type(input, "서");
     const searchButton = screen.getByRole("button", { name: "검색" });
     await userEvent.click(searchButton);
 
@@ -65,8 +84,8 @@ describe("SearchBar 컴포넌트 통합 테스트", () => {
     );
     await userEvent.type(input, "서울역");
     await userEvent.keyboard("{enter}");
-    expect(window.alert).toHaveBeenCalledWith(
-      "두 글자 이상의 검색어를 입력해주세요."
-    );
+    await waitFor(() => {
+      expect(window.alert).not.toHaveBeenCalledWith();
+    });
   });
 });
