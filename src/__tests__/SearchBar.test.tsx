@@ -91,3 +91,35 @@ describe("SearchBar 컴포넌트 통합 테스트", () => {
     });
   });
 });
+
+describe("검색어 관리", () => {
+  beforeEach(() => {
+    let mockSearchWord = "";
+    (useSearchBar as jest.Mock).mockImplementation(() => ({
+      searchWord: mockSearchWord,
+      setSearchWord: jest.fn().mockImplementation((newWord: string) => {
+        console.log("newWord?", newWord);
+        mockSearchWord = mockSearchWord + newWord;
+      }),
+      handleSearch: jest.fn().mockImplementation(() => {
+        console.log("mockSearchWord length", mockSearchWord.length);
+        if (mockSearchWord.length <= 1) {
+          window.alert("두 글자 이상의 검색어를 입력해주세요.");
+        } else {
+          localStorage.setItem("searchWord", mockSearchWord);
+        }
+      }),
+    }));
+  });
+  it("검색을 실행하면 로컬 스토리지에 검색어가 저장된다", async () => {
+    render(<SearchBar />);
+    const input = screen.getByPlaceholderText(
+      "지하철 역이름을 검색해주세요 (역 제외)"
+    );
+    await userEvent.type(input, "서울");
+    await userEvent.keyboard("{enter}");
+    console.log("localStorage!!!", localStorage.getItem("searchWord"));
+
+    expect(localStorage.getItem("searchWord")).toContain("서울");
+  });
+});
