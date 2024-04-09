@@ -1,7 +1,7 @@
 import SearchHistory from "@/components/SearchHistory";
 import useSearchWordStore from "@/stores/useSearchWordStore";
-import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import render from "@/utils/test/render";
+import { screen } from "@testing-library/react";
 
 jest.mock("../stores/useSearchWordStore");
 const mockedUseSearchWordStore = useSearchWordStore as jest.MockedFunction<
@@ -11,13 +11,13 @@ const mockedUseSearchWordStore = useSearchWordStore as jest.MockedFunction<
 const historyForTest = ["서울", "남성", "남구로", "대림", "구로"];
 
 describe("SearchHistory 렌더링", () => {
-  it("SearchHistory가 렌러딩 될 때, 전역으로 관리하는 검색어 기록에서 검색어들을 가져와서 보여준다", () => {
+  it("SearchHistory가 렌러딩 될 때, 전역으로 관리하는 검색어 기록에서 검색어들을 가져와서 보여준다", async () => {
     mockedUseSearchWordStore.mockImplementation(() => ({
       searchWordHistory: historyForTest,
       setSearchWord: jest.fn(),
       setSearchWordHistory: jest.fn(),
     }));
-    render(<SearchHistory />);
+    await render(<SearchHistory />);
     historyForTest.forEach((history) => {
       expect(screen.getByText(history)).toBeInTheDocument();
     });
@@ -30,8 +30,8 @@ describe("SearchHistory 렌더링", () => {
       setSearchWord: setSearchWordMock,
       setSearchWordHistory: jest.fn(),
     }));
-    render(<SearchHistory />);
-    await userEvent.click(screen.getByText("서울"));
+    const { user } = await render(<SearchHistory />);
+    await user.click(screen.getByText("서울"));
 
     expect(setSearchWordMock).toHaveBeenCalledWith("서울");
   });
@@ -43,10 +43,10 @@ describe("SearchHistory 렌더링", () => {
       setSearchWord: jest.fn(),
       setSearchWordHistory: setSearchWordHistoryMock,
     }));
-    render(<SearchHistory />);
+    const { user } = await render(<SearchHistory />);
 
     const deleteButton = screen.getByTestId("delete-서울");
-    await userEvent.click(deleteButton);
+    await user.click(deleteButton);
 
     expect(useSearchWordStore().setSearchWordHistory).toHaveBeenCalledWith([
       "남성",
