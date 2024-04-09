@@ -1,3 +1,4 @@
+import useSearchBar from "@/hooks/useSearchBar";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import SearchBar from "../components/SearchBar";
@@ -17,31 +18,30 @@ jest.mock("../hooks/useSearchByWebSocket", () => ({
     sendSearchWord: jest.fn(),
   }),
 }));
-
-jest.mock("../hooks/useSearchBar", () => {
-  let mockSearchWord = "";
-
-  return {
-    __esModule: true,
-    default: jest.fn(() => ({
-      searchWord: mockSearchWord,
-      setSearchWord: (newWord: string) => {
-        mockSearchWord = newWord;
-      },
-      handleSearch: jest.fn().mockImplementation(() => {
-        if (mockSearchWord.length <= 1) {
-          window.alert("두 글자 이상의 검색어를 입력해주세요.");
-        }
-      }),
-    })),
-  };
-});
+jest.mock("../hooks/useSearchBar");
 
 beforeAll(() => {
   window.alert = jest.fn();
 });
 
 describe("SearchBar 컴포넌트 통합 테스트", () => {
+  beforeEach(() => {
+    let mockSearchWord = "";
+    (useSearchBar as jest.Mock).mockImplementation(() => ({
+      searchWord: mockSearchWord,
+      setSearchWord: jest.fn().mockImplementation((newWord: string) => {
+        console.log("newWord?", newWord);
+        mockSearchWord = mockSearchWord + newWord;
+      }),
+      handleSearch: jest.fn().mockImplementation(() => {
+        console.log("mockSearchWord length", mockSearchWord.length);
+        if (mockSearchWord.length <= 1) {
+          window.alert("두 글자 이상의 검색어를 입력해주세요.");
+        }
+      }),
+    }));
+  });
+
   it("SearchBar 컴포넌트 렌더링 되면 input의 placeholder가 보여진다.", () => {
     render(<SearchBar />);
     expect(
@@ -58,7 +58,9 @@ describe("SearchBar 컴포넌트 통합 테스트", () => {
     const searchButton = screen.getByRole("button", { name: "검색" });
     await userEvent.click(searchButton);
 
-    expect(window.alert).not.toHaveBeenCalledWith();
+    await waitFor(() => {
+      expect(window.alert).not.toHaveBeenCalled();
+    });
   });
 
   it("한 글자 이하의 검색어를 입력하면 alert('두 글자 이상의 검색어를 입력해주세요.')을 보여준다", async () => {
@@ -85,7 +87,7 @@ describe("SearchBar 컴포넌트 통합 테스트", () => {
     await userEvent.type(input, "서울역");
     await userEvent.keyboard("{enter}");
     await waitFor(() => {
-      expect(window.alert).not.toHaveBeenCalledWith();
+      expect(window.alert).not.toHaveBeenCalled();
     });
   });
 });
