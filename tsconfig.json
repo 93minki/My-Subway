@@ -6,7 +6,7 @@
       "@/*": ["./src/*"]
     },
 
-    "target": "ES2020",
+    "target": "ESNext",
     "useDefineForClassFields": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
@@ -26,8 +26,8 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
 
-    "types": ["vite-plugin-pwa/client", "jest"],
+    "types": ["vite-plugin-pwa/client", "jest", "@testing-library/jest-dom"],
     "esModuleInterop": true
   },
-  "include": ["src", "src/sw.js"]
+  "include": ["src", "src/sw.js", "**/*.tsx"]
 }
