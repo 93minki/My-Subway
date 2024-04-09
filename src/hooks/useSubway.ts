@@ -1,5 +1,5 @@
-import useSearchWordStore from "@/stores/searchWord";
 import useTrackSubwayStore from "@/stores/trackSubway";
+import useSearchWordStore from "@/stores/useSearchWordStore";
 import useUserInfoStore from "@/stores/userInfo";
 import { realTimeArrivalListType } from "@/types/ResponseType";
 import useSearchByWebsocket from "./useSearchByWebSocket";

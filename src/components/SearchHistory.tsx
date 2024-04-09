@@ -1,4 +1,4 @@
-import useSearchWordStore from "@/stores/searchWord";
+import useSearchWordStore from "@/stores/useSearchWordStore";
 import { VscError } from "react-icons/vsc";
 import { Button } from "./ui/button";
 
@@ -26,6 +26,7 @@ const SearchHistory = () => {
             {history}
           </Button>
           <VscError
+            data-testid={`delete-${history}`}
             className="absolute top-0 right-0 invisible text-white group-hover:visible"
             onClick={() => deleteSearchWordHistory(history)}
           />

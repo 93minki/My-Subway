@@ -3,7 +3,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import SearchBar from "../components/SearchBar";
 
-jest.mock("../stores/searchWord", () => ({
+jest.mock("../stores/useSearchWordStore", () => ({
   __esModule: true,
   default: jest.fn(() => ({
     searchWord: "",
