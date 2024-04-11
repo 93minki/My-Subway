@@ -1,4 +1,4 @@
-import useSearchWordStore from "@/stores/searchWord";
+import useSearchWordStore from "@/stores/useSearchWordStore";
 import useSearchByWebsocket from "./useSearchByWebSocket";
 
 const useSearchBar = () => {
