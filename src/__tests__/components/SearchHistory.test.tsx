@@ -3,7 +3,7 @@ import useSearchWordStore from "@/stores/useSearchWordStore";
 import render from "@/utils/test/render";
 import { screen } from "@testing-library/react";
 
-jest.mock("../stores/useSearchWordStore");
+jest.mock("../../stores/useSearchWordStore");
 const mockedUseSearchWordStore = useSearchWordStore as jest.MockedFunction<
   typeof useSearchWordStore
 >;

@@ -9,6 +9,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { API_ENDPOINT } from "@/constants";
 import useUserInfoStore from "@/stores/userInfo";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -22,7 +23,7 @@ const formSchema = z.object({
     .email("유효한 이메일이 아닙니다."),
   password: z
     .string()
-    .min(1, { message: "비밀번호는 1자리 이상이여야 합니다." })
+    .min(1, { message: "비밀번호는 필수 항목입니다." })
     .max(20),
 });
 
@@ -40,20 +41,17 @@ const SigninForm = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     // 로그인 로직 추가
-    const response = await fetch(
-      `${import.meta.env.VITE_API_ENDPOINT}/auth/signin`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: values.email,
-          password: values.password,
-        }),
-        credentials: "include",
-      }
-    );
+    const response = await fetch(`${API_ENDPOINT}/auth/signin`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: values.email,
+        password: values.password,
+      }),
+      credentials: "include",
+    });
     const result = await response.json();
     setUserInfo({
       email: result.payload.email,

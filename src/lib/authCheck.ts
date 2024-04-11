@@ -1,3 +1,5 @@
+import { API_ENDPOINT } from "@/constants";
+
 type authCheckFuncProps = (result: {
   email: string;
   at: string;
@@ -10,7 +12,7 @@ const authCheckFunc = async (setUserInfo: authCheckFuncProps) => {
 
   if (!accessToken) return false;
 
-  const response = await fetch(`${import.meta.env.VITE_API_ENDPOINT}/user/me`, {
+  const response = await fetch(`${API_ENDPOINT}/user/me`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

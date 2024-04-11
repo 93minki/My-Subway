@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { API_ENDPOINT, VAPID_PUBLIC_KEY } from "@/constants";
 import useSubscriptionInfoStore from "@/stores/subscriptionInfo";
 import { useCallback, useEffect } from "react";
 import useSubscriptionStatus from "./useSubscriptionStatus";
@@ -23,7 +24,7 @@ const useServiceWorkerRegist = () => {
 
   const subscribePushManager = useCallback(
     (swReg: ServiceWorkerRegistration) => {
-      const applicationServerKey = import.meta.env.VITE_VAPID_PUBLIC_KEY;
+      const applicationServerKey = VAPID_PUBLIC_KEY;
 
       swReg.pushManager
         .subscribe({
@@ -34,7 +35,7 @@ const useServiceWorkerRegist = () => {
           setSubscriptionInfo(subscription);
           const accessToken = localStorage.getItem("at");
 
-          fetch(`${import.meta.env.VITE_API_ENDPOINT}/subscribe`, {
+          fetch(`${API_ENDPOINT}/subscribe`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

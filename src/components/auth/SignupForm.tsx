@@ -9,6 +9,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { API_ENDPOINT } from "@/constants";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -39,21 +40,18 @@ const SignupForm = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     // 회원가입 로직 추가
-    const response = await fetch(
-      `${import.meta.env.VITE_API_ENDPOINT}/auth/signup`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: values.email,
-          nickname: values.nickname,
-          password: values.password,
-        }),
-        credentials: "include",
-      }
-    );
+    const response = await fetch(`${API_ENDPOINT}/auth/signup`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: values.email,
+        nickname: values.nickname,
+        password: values.password,
+      }),
+      credentials: "include",
+    });
     const result = await response.json();
     console.log(result);
     if (result.result === "success") {
