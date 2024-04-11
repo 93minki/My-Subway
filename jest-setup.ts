@@ -22,9 +22,5 @@ const localStorageMock = (function () {
   };
 })();
 
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
-  useNavigate: () => jest.fn(),
-}));
 
 Object.defineProperty(window, "localStorage", { value: localStorageMock });
