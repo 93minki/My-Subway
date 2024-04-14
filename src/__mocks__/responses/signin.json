@@ -1,0 +1,10 @@
+{
+  "result": "success",
+  "message": "로그인 성공",
+  "payload": {
+    "id": 1,
+    "email": "test@test.com",
+    "nickname": "tester",
+    "at": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ0ZXN0QHRlc3QuY29tIiwiaWF0IjoxNzEzMDkyMTg2LCJleHAiOjE3MTMwOTIyNDYsImlzcyI6Im1pbmtpIn0.8qsJ8tgt0eBDsV_ZSbUZuXcwincdl4uAvEnT7tw4WfE"
+  }
+}

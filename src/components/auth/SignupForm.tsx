@@ -40,6 +40,7 @@ const SignupForm = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     // 회원가입 로직 추가
+    console.log("values", values);
     const response = await fetch(`${API_ENDPOINT}/auth/signup`, {
       method: "POST",
       headers: {
@@ -52,6 +53,7 @@ const SignupForm = () => {
       }),
       credentials: "include",
     });
+    console.log("response", response);
     const result = await response.json();
     console.log(result);
     if (result.result === "success") {

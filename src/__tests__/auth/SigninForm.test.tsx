@@ -36,7 +36,7 @@ describe("로그인 로직", () => {
     expect(screen.getByText("유효한 이메일이 아닙니다."));
   });
 
-  it("이메일, 비밀번호를 입력하지 않고 로그인을 시도한다.", async () => {
+  it("이메일, 비밀번호를 입력하지 않고 로그인을 시도하면 경고를 보여준다.", async () => {
     const { user } = await render(<SigninForm />);
     const loginButton = screen.getByRole("button", { name: "로그인" });
 

@@ -4,6 +4,7 @@ const config: JestConfigWithTsJest = {
   preset: "ts-jest",
   testEnvironment: "jsdom",
   setupFilesAfterEnv: ["<rootDir>/jest-setup.ts"],
+  setupFiles: ["<rootDir>/jest.polyfills.js"],
   moduleNameMapper: {
     "^.+\\.svg$": "jest-svg-transformer",
     "\\.(css|less|sass|scss)$": "identity-obj-proxy",
@@ -16,6 +17,9 @@ const config: JestConfigWithTsJest = {
   clearMocks: true,
   collectCoverage: true,
   coverageDirectory: "coverage",
+  testEnvironmentOptions: {
+    customExportConditions: [""],
+  },
 };
 
 export default config;
