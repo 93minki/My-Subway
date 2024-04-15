@@ -1,3 +1,4 @@
+import { WS_ENDPOINT } from "@/constants";
 import useSearchResultStore from "@/stores/searchResult";
 import React, {
   MutableRefObject,
@@ -27,7 +28,7 @@ export const WebSocketProvider = ({
 
   const initializeWebSocket = useCallback(() => {
     console.log("WebSocket 연결 시도");
-    ws.current = new WebSocket(`${import.meta.env.VITE_WS_ENDPOINT}`);
+    ws.current = new WebSocket(`${WS_ENDPOINT}`);
     ws.current.onmessage = (event) => {
       const message = JSON.parse(event.data);
       console.log("message?", message);

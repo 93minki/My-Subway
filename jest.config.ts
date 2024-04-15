@@ -4,6 +4,7 @@ const config: JestConfigWithTsJest = {
   preset: "ts-jest",
   testEnvironment: "jsdom",
   setupFilesAfterEnv: ["<rootDir>/jest-setup.ts"],
+  setupFiles: ["<rootDir>/jest.polyfills.js"],
   moduleNameMapper: {
     "^.+\\.svg$": "jest-svg-transformer",
     "\\.(css|less|sass|scss)$": "identity-obj-proxy",
@@ -16,15 +17,8 @@ const config: JestConfigWithTsJest = {
   clearMocks: true,
   collectCoverage: true,
   coverageDirectory: "coverage",
-  globals: {
-    "import.meta": {
-      env: {
-        VITE_API_ENDPOINT: "http://localhost:9090",
-        VITE_WS_ENDPOINT: "ws://localhost:9090",
-        VITE_VAPID_PUBLIC_KEY:
-          "BC7SNZAvIUvYNP2_zb8O0aMSNaAEw5jguX2gRHjuf9hy34ZiRz-p9wmeZDDxrbH1cCYtnjehxI3GLYJ_g9gXwic",
-      },
-    },
+  testEnvironmentOptions: {
+    customExportConditions: [""],
   },
 };
 
