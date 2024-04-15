@@ -67,6 +67,19 @@ describe("회원가입 로직", () => {
 
     await user.click(signupButton);
 
+    // api 로직에 대한 테스트를 추가로?
+
     expect(navigateFn).toHaveBeenNthCalledWith(1, "/signin");
+  });
+
+  it("fetch test", async () => {
+    const response = await fetch("http://localhost:9090/example/user");
+
+    expect(response.status).toBe(200);
+    expect(response.statusText).toBe("OK");
+    expect(await response.json()).toEqual({
+      name: "minki",
+      nickname: "mk",
+    });
   });
 });

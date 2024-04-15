@@ -31,14 +31,19 @@ export const handlers = [
       });
     }
   ),
-  http.post(`http://localhost:9090/auth/signup`, ({ request }) => {
-    console.log("request!!!", request);
+  http.post(`http://localhost:9090/auth/signup`, () => {
     return HttpResponse.json({
       result: "success",
       message: "회원가입에 성공했습니다.",
       payload: {
         email: "abc@abc.com",
       },
+    });
+  }),
+  http.get("http://localhost:9090/example/user", () => {
+    return HttpResponse.json({
+      name: "minki",
+      nickname: "mk",
     });
   }),
 ];

@@ -30,6 +30,7 @@ describe("SearchHistory 렌더링", () => {
       setSearchWord: setSearchWordMock,
       setSearchWordHistory: jest.fn(),
     }));
+
     const { user } = await render(<SearchHistory />);
     await user.click(screen.getByText("서울"));
 

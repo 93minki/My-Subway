@@ -22,6 +22,7 @@ const authCheckFunc = async (setUserInfo: authCheckFuncProps) => {
   });
 
   const userInfo = await response.json();
+  
 
   if (userInfo.payload.at) {
     localStorage.setItem("at", userInfo.payload.at);

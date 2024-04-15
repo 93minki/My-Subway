@@ -4,6 +4,10 @@ import { handlers } from "./src/__mocks__/handler";
 
 export const server = setupServer(...handlers);
 
+server.events.on("request:start", ({ request }) => {
+  console.log("MSW intercepted:", request.method, request.url);
+});
+
 beforeAll(() => {
   console.log("서버 시작");
   server.listen({ onUnhandledRequest: "warn" });
