@@ -8,6 +8,17 @@ server.events.on("request:start", ({ request }) => {
   console.log("MSW intercepted:", request.method, request.url);
 });
 
+jest.mock("@/constants", () => ({
+  API_ENDPOINT: "http://localhost:9090",
+  WS_ENDPOINT: "ws://localhost:9090",
+  VAPID_PUBLIC_KEY: "BC7SNZAvIUvYNPc",
+}));
+
+globalThis.Notification = {
+  requestPermission: jest.fn(),
+  permission: "granted",
+} as unknown as jest.Mocked<typeof Notification>;
+
 beforeAll(() => {
   console.log("서버 시작");
   server.listen({ onUnhandledRequest: "warn" });
