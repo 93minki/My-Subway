@@ -3,21 +3,21 @@ import render from "@/utils/test/render";
 import { screen, waitFor } from "@testing-library/react";
 import SearchBar from "../../components/SearchBar";
 
-jest.mock("../../stores/useSearchWordStore", () => ({
-  __esModule: true,
-  default: jest.fn(() => ({
-    searchWord: "",
-    setSearchWord: jest.fn(),
-    searchWordHistory: [],
-    setSearchWordHistory: jest.fn(),
-  })),
-}));
-jest.mock("../../hooks/useSearchByWebSocket", () => ({
-  __esModule: true,
-  default: () => ({
-    sendSearchWord: jest.fn(),
-  }),
-}));
+// jest.mock("../../stores/useSearchWordStore", () => ({
+//   __esModule: true,
+//   default: jest.fn(() => ({
+//     searchWord: "",
+//     setSearchWord: jest.fn(),
+//     searchWordHistory: [],
+//     setSearchWordHistory: jest.fn(),
+//   })),
+// }));
+// jest.mock("../../hooks/useSearchByWebSocket", () => ({
+//   __esModule: true,
+//   default: () => ({
+//     sendSearchWord: jest.fn(),
+//   }),
+// }));
 jest.mock("../../hooks/useSearchBar");
 
 beforeAll(() => {

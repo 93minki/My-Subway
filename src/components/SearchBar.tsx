@@ -4,6 +4,7 @@ import { Input } from "./ui/input";
 
 const SearchBar = () => {
   const { searchWord, handleSearch, setSearchWord } = useSearchBar();
+  console.log("searchWord!@!SDSDS", searchWord);
 
   return (
     <div className="flex flex-col gap-4">

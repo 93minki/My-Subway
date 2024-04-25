@@ -20,18 +20,15 @@ globalThis.Notification = {
 } as unknown as jest.Mocked<typeof Notification>;
 
 beforeAll(() => {
-  console.log("서버 시작");
   server.listen({ onUnhandledRequest: "warn" });
 });
 
 afterEach(() => {
-  console.log("핸들러 리셋");
   server.resetHandlers();
   jest.clearAllMocks();
 });
 
 afterAll(() => {
-  console.log("서버 닫기");
   jest.resetAllMocks();
   server.close();
 });

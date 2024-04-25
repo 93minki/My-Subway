@@ -6,6 +6,8 @@ const useSearchBar = () => {
   const { setSearchWord, searchWord, searchWordHistory, setSearchWordHistory } =
     useSearchWordStore();
 
+  console.log("useSearchBar test", searchWord, typeof searchWord);
+
   const handleSearch = async () => {
     // 검색 입력 제한 -> 도메인 로직
     const trimedSearchWord = searchWord.trim();
