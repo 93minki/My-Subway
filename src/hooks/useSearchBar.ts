@@ -1,3 +1,4 @@
+import useUserInfoStore from "@/stores/userInfo";
 import useSearchWordStore from "@/stores/useSearchWordStore";
 import useSearchByWebsocket from "./useSearchByWebSocket";
 
@@ -5,8 +6,7 @@ const useSearchBar = () => {
   const { sendSearchWord } = useSearchByWebsocket();
   const { setSearchWord, searchWord, searchWordHistory, setSearchWordHistory } =
     useSearchWordStore();
-
-  console.log("useSearchBar test", searchWord, typeof searchWord);
+  const userInfo = useUserInfoStore((state) => state.userInfo);
 
   const handleSearch = async () => {
     // 검색 입력 제한 -> 도메인 로직
@@ -21,7 +21,11 @@ const useSearchBar = () => {
       setSearchWordHistory(updateHistory);
     }
     setSearchWord(trimedSearchWord);
-    sendSearchWord({ type: "search", searchWord: trimedSearchWord });
+    sendSearchWord({
+      type: "search",
+      searchWord: trimedSearchWord,
+      userId: userInfo.id,
+    });
   };
 
   return {

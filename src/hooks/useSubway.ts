@@ -5,19 +5,30 @@ import { realTimeArrivalListType } from "@/types/ResponseType";
 import useSearchByWebsocket from "./useSearchByWebSocket";
 
 const useSubway = (subwayInfo: realTimeArrivalListType) => {
-  const { sendTrackSubwayInfo } = useSearchByWebsocket();
+  const { sendTrackSubwayInfo, sendStopTracking } = useSearchByWebsocket();
   const searchWord = useSearchWordStore((state) => state.searchWord);
   const userInfo = useUserInfoStore((state) => state.userInfo);
-  const { setSubwayNumber, subwayNumber } = useTrackSubwayStore();
+  const { setSubwayNumber, subwayNumber, resetSubwayNumber } =
+    useTrackSubwayStore();
 
-  const onClickHandler = () => {
-    setSubwayNumber(subwayInfo.btrainNo);
-    sendTrackSubwayInfo({
-      type: "subway",
-      subwayNumber: subwayInfo.btrainNo,
-      userId: userInfo.id,
-      searchWord: searchWord,
-    });
+  const onClickHandler = ({ isSelected }: { isSelected: boolean }) => {
+    if (isSelected) {
+      // 추적 중단
+      resetSubwayNumber();
+      sendStopTracking({
+        type: "stop_tracking",
+        userId: userInfo.id,
+      });
+    } else {
+      // 추적 시작
+      setSubwayNumber(subwayInfo.btrainNo);
+      sendTrackSubwayInfo({
+        type: "start_tracking",
+        subwayNumber: subwayInfo.btrainNo,
+        userId: userInfo.id,
+        stationName: searchWord,
+      });
+    }
   };
 
   return {

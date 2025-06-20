@@ -7,30 +7,22 @@ export interface SearchResultType {
 }
 
 export interface SearchResultState {
-  searchResult: {
-    subwayData: SearchResultType | statusMessage;
-    stopMessage: string;
-  };
-  setSearchResult: (result: {
-    subwayData: SearchResultType | statusMessage;
-    stopMessage: string;
-  }) => void;
+  searchResult: SearchResultType | statusMessage;
+
+  setSearchResult: (result: SearchResultType | statusMessage) => void;
 }
 
 const useSearchResultStore = create<SearchResultState>()((set) => ({
   searchResult: {
-    subwayData: {
-      errorMessage: {
-        code: "",
-        developerMessage: "",
-        link: "",
-        message: "",
-        status: 0,
-        total: 0,
-      },
-      realtimeArrivalList: [],
+    errorMessage: {
+      code: "",
+      developerMessage: "",
+      link: "",
+      message: "",
+      status: 0,
+      total: 0,
     },
-    stopMessage: "",
+    realtimeArrivalList: [],
   },
   setSearchResult: (result) => set({ searchResult: result }),
 }));

@@ -33,6 +33,27 @@
     --ring: 0 0% 3.9%;
 
     --radius: 0.5rem;
+
+    /* 지하철 호선 색상 */
+    --1001: #0052a4;
+    --1002: #00a84d;
+    --1003: #ef7c1c;
+    --1004: #00a5de;
+    --1005: #996cac;
+    --1006: #cd7c2f;
+    --1007: #747f00;
+    --1008: #e6186c;
+    --1009: #bdb092;
+    --1032: #9a6292;
+    --1063: #77c4a3;
+    --1065: #0065b3;
+    --1067: #00ffff;
+    --1075: #fda600;
+    --1077: #c8102e;
+    --1081: #0054a6;
+    --1092: #7fbf7f;
+    --1093: #81a914;
+    --1094: #7fbf7f;
   }
 
   .dark {
@@ -74,6 +95,37 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* 스크롤바 스타일 */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* 커스텀 스크롤바 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
 .arrow-right::after {
   content: "";
   position: absolute;
@@ -82,4 +134,31 @@
   border-width: 10px 0 10px 10px;
   border-color: transparent transparent transparent #ffffff;
   transform: translateY(-50%);
+}
+
+/* 모바일 터치 최적화 */
+@media (max-width: 768px) {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  input {
+    font-size: 16px; /* iOS 줌 방지 */
+  }
+}
+
+/* 애니메이션 */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-in {
+  animation: slideIn 0.3s ease-out;
 }
