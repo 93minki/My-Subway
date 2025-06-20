@@ -9,7 +9,7 @@ const useSearchByWebsocket = () => {
       type: string;
       subwayNumber: string;
       userId: string;
-      searchWord: string;
+      stationName: string;
     }) => {
       if (ws.current?.readyState === WebSocket.OPEN) {
         ws.current.send(JSON.stringify(data));
@@ -18,8 +18,8 @@ const useSearchByWebsocket = () => {
     [ws]
   );
 
-  const sendSearchWord = useCallback(
-    (data: { type: string; searchWord: string }) => {
+  const sendStopTracking = useCallback(
+    (data: { type: string; userId: string }) => {
       if (ws.current?.readyState === WebSocket.OPEN) {
         ws.current.send(JSON.stringify(data));
       }
@@ -27,7 +27,16 @@ const useSearchByWebsocket = () => {
     [ws]
   );
 
-  return { sendTrackSubwayInfo, sendSearchWord };
+  const sendSearchWord = useCallback(
+    (data: { type: string; searchWord: string; userId: string }) => {
+      if (ws.current?.readyState === WebSocket.OPEN) {
+        ws.current.send(JSON.stringify(data));
+      }
+    },
+    [ws]
+  );
+
+  return { sendTrackSubwayInfo, sendSearchWord, sendStopTracking };
 };
 
 export default useSearchByWebsocket;
