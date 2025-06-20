@@ -15,6 +15,12 @@ export default function Home() {
   useServiceWorkerRegist();
 
   const requestPushPermission = () => {
+    // Notification API 지원 여부 체크
+    if (!("Notification" in window)) {
+      console.log("이 브라우저는 Notification을 지원하지 않습니다.");
+      return;
+    }
+
     Notification.requestPermission().then((permission) => {
       if (permission === "granted") {
         console.log("Notification permission granted");
@@ -23,6 +29,11 @@ export default function Home() {
       }
     });
   };
+
+  // Notification 지원 여부와 권한 상태 체크
+  const isNotificationSupported = "Notification" in window;
+  const isPermissionGranted =
+    isNotificationSupported && Notification.permission === "granted";
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
@@ -43,7 +54,7 @@ export default function Home() {
           )}
 
           <div className="flex flex-col justify-center">
-            {Notification.permission !== "granted" && (
+            {isNotificationSupported && !isPermissionGranted && (
               <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
                 {(isSafari || isMobileSafari || isIOS) && (
                   <p className="text-xs text-amber-700 mb-2 text-center">
