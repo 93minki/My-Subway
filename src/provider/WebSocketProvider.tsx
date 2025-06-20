@@ -28,8 +28,13 @@ export const WebSocketProvider = ({
   );
 
   const initializeWebSocket = useCallback(() => {
-    console.log("WebSocket 연결 시도");
+    console.log("WebSocket 연결 시도:", WS_ENDPOINT);
     ws.current = new WebSocket(`${WS_ENDPOINT}`);
+
+    ws.current.onopen = () => {
+      console.log("WebSocket 연결 성공");
+    };
+
     ws.current.onmessage = (event) => {
       const message = JSON.parse(event.data);
       const { type, data } = message;
@@ -60,14 +65,14 @@ export const WebSocketProvider = ({
     };
 
     ws.current.onerror = (event) => {
-      console.error("Websocket Error: ", event);
+      console.error("WebSocket Error: ", event);
     };
 
     ws.current.onclose = (event) => {
       console.log("WebSocket Connection Closed", event);
       ws.current = null;
     };
-  }, []);
+  }, [setSearchResult]);
 
   const handleVisibilityChange = useCallback(() => {
     if (document.visibilityState === "visible" && !ws.current) {

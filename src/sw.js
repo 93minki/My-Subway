@@ -20,12 +20,58 @@ self.addEventListener("fetch", (event) => {
 });
 
 self.addEventListener("push", (event) => {
-  const data = event.data.json();
-  console.log("push data", data);
-  const title = data.title || "Fallback Title";
-  const options = {
-    body: data.body || "Fallback body",
-  };
+  try {
+    const data = event.data ? event.data.json() : {};
+    console.log("push data", data);
 
-  event.waitUntil(self.registration.showNotification(title, options));
+    const title = data.title || "My Subway 알림";
+    const options = {
+      body: data.body || "새로운 알림이 도착했습니다.",
+      icon: "/icons/app_logo_192.webp",
+      badge: "/icons/favicon.ico",
+    };
+
+    // Notification 지원 여부 체크
+    if ("showNotification" in self.registration) {
+      event.waitUntil(
+        self.registration.showNotification(title, options).catch((error) => {
+          console.error("Notification 표시 실패:", error);
+        })
+      );
+    } else {
+      console.log("이 브라우저에서는 Notification이 지원되지 않습니다.");
+    }
+  } catch (error) {
+    console.error("Push 이벤트 처리 중 오류:", error);
+  }
+});
+
+// Notification 클릭 이벤트 처리 (Safari 호환성 고려)
+self.addEventListener("notificationclick", (event) => {
+  try {
+    console.log("Notification 클릭됨:", event.notification);
+
+    event.notification.close();
+
+    // 앱으로 포커스 이동
+    event.waitUntil(
+      self.clients
+        .matchAll()
+        .then((clientList) => {
+          for (const client of clientList) {
+            if (client.url === "/" && "focus" in client) {
+              return client.focus();
+            }
+          }
+          if (self.clients.openWindow) {
+            return self.clients.openWindow("/");
+          }
+        })
+        .catch((error) => {
+          console.error("Notification 클릭 처리 실패:", error);
+        })
+    );
+  } catch (error) {
+    console.error("Notification 클릭 이벤트 처리 중 오류:", error);
+  }
 });
