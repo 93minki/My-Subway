@@ -8,40 +8,58 @@ type authCheckFuncProps = (result: {
 }) => void;
 
 const authCheckFunc = async (setUserInfo: authCheckFuncProps) => {
-  const accessToken = localStorage.getItem("at");
+  try {
+    const accessToken = localStorage.getItem("at");
+    console.log("[AuthCheck] Access token exists:", !!accessToken);
 
-  if (!accessToken) return false;
+    if (!accessToken) {
+      console.log("[AuthCheck] No access token found");
+      return false;
+    }
 
-  const response = await fetch(`${API_ENDPOINT}/user/me`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    },
-    credentials: "include",
-  });
+    console.log("[AuthCheck] Making API request to /user/me");
+    const response = await fetch(`${API_ENDPOINT}/user/me`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      credentials: "include",
+    });
 
-  const userInfo = await response.json();
-  
+    console.log("[AuthCheck] Response status:", response.status);
 
-  if (userInfo.payload.at) {
-    localStorage.setItem("at", userInfo.payload.at);
+    if (!response.ok) {
+      console.log("[AuthCheck] Response not ok, status:", response.status);
+      return false;
+    }
+
+    const userInfo = await response.json();
+    console.log("[AuthCheck] User info received:", userInfo);
+
+    if (userInfo.payload?.at) {
+      localStorage.setItem("at", userInfo.payload.at);
+      console.log("[AuthCheck] Updated access token in localStorage");
+    }
+
+    if (userInfo.payload?.user) {
+      setUserInfo({
+        email: userInfo.payload.user.email,
+        at: userInfo.payload.at || accessToken,
+        id: userInfo.payload.user.id,
+        nickname: userInfo.payload.user.nickname,
+      });
+      console.log("[AuthCheck] User info set successfully");
+    }
+
+    const isSuccess = userInfo.result === "success";
+    console.log("[AuthCheck] Final result:", isSuccess);
+
+    return isSuccess;
+  } catch (error) {
+    console.error("[AuthCheck] Error during auth check:", error);
+    return false;
   }
-  console.log("userInfo", userInfo);
-
-  setUserInfo({
-    email: userInfo.payload.user.email,
-    at: userInfo.payload.at,
-    id: userInfo.payload.user.id,
-    nickname: userInfo.payload.user.nickname,
-  });
-
-  // TODO
-  // access token이 변경되었을 때 로컬 스토리지에 저장해줘야 함
-  // 유저 정보가 있으 경우 유저 정보를 저장해줘야 함
-  console.log("userInfo", userInfo.result === "success");
-
-  return userInfo.result === "success" ? true : false;
 };
 
 export default authCheckFunc;
