@@ -1,4 +1,6 @@
+import { isMobile } from "react-device-detect";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import MobileDebugger from "./components/MobileDebugger";
 import CommonLayout from "./layout/CommonLayout";
 import ProtectedRoute from "./layout/ProtectedRoute";
 import Home from "./pages/Home";
@@ -7,6 +9,9 @@ import SignupPage from "./pages/Signup";
 import { WebSocketProvider } from "./provider/WebSocketProvider";
 
 function App() {
+
+  const isDevMode = import.meta.env.DEV;
+
   return (
     <CommonLayout>
       <WebSocketProvider>
@@ -20,6 +25,9 @@ function App() {
             </Route>
           </Routes>
         </BrowserRouter>
+
+        {/* 개발 환경의 모바일에서만 디버거 표시 */}
+        {isDevMode && isMobile && <MobileDebugger />}
       </WebSocketProvider>
     </CommonLayout>
   );
