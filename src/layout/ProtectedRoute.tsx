@@ -14,10 +14,9 @@ const ProtectedRoute = () => {
       try {
         setIsLoading(true);
         const authResult = await authCheckFunc(setUserInfo);
-        console.log("[ProtectedRoute] Auth check result:", authResult);
         setIsAuth(authResult);
       } catch (error) {
-        console.error("[ProtectedRoute] Auth check error:", error);
+        console.error("인증 확인 중 오류:", error);
         setIsAuth(false);
       } finally {
         setIsLoading(false);
@@ -41,22 +40,15 @@ const ProtectedRoute = () => {
 
   // 인증되지 않은 경우 로그인 페이지로 리다이렉트
   if (!isAuth) {
-    console.log("[ProtectedRoute] Not authenticated, redirecting to signin");
     return <Navigate to="/signin" replace />;
   }
 
   // 인증된 상태에서 /signin 페이지에 있다면 홈으로 리다이렉트
   if (isAuth && location.pathname === "/signin") {
-    console.log(
-      "[ProtectedRoute] Authenticated user on signin page, redirecting to home"
-    );
     return <Navigate to="/" replace />;
   }
 
   // 인증된 경우 보호된 컴포넌트 렌더링
-  console.log(
-    "[ProtectedRoute] User authenticated, rendering protected content"
-  );
   return <Outlet />;
 };
 
