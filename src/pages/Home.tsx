@@ -28,43 +28,44 @@ export default function Home() {
   // iOS 여부 체크 (PWA 설치 가이드용)
   const isIOSDevice = isIOS || isMobileSafari || isSafari;
 
-  // PWA 설치 가능 여부를 더 정확하게 확인
+  // PWA 설치 가능 여부를 정확하게 확인
   const getPWAInstallability = () => {
-    // iOS의 경우 항상 수동 설치 가이드 제공
-    if (isIOSDevice) {
-      return { canInstall: true, type: "ios-manual" };
-    }
-
-    // 이미 PWA로 실행 중인지 확인
+    // 먼저 이미 PWA로 실행 중인지 확인 (iOS, Android 공통)
     const isStandalone = window.matchMedia(
       "(display-mode: standalone)"
     ).matches;
     const isInWebAppiOS = (window.navigator as any).standalone === true;
 
+    // PWA로 이미 실행 중이면 설치 안내 표시하지 않음
     if (isStandalone || isInWebAppiOS) {
       return { canInstall: false, type: "already-installed" };
     }
 
-    // 브라우저 자동 설치 프롬프트가 있는 경우 (가장 확실한 방법)
+    // iOS의 경우 PWA로 실행 중이 아니면 수동 설치 가이드 제공
+    if (isIOSDevice) {
+      return { canInstall: true, type: "ios-manual" };
+    }
+
+    // 안드로이드/데스크톱: 브라우저 자동 설치 프롬프트가 있는 경우
     if (isInstallable) {
       return { canInstall: true, type: "browser-prompt" };
     }
 
-    // PWA 기본 요구사항 확인
+    // PWA 기본 요구사항 확인 (안드로이드/데스크톱)
     const hasServiceWorker = "serviceWorker" in navigator;
     const isSecure =
       location.protocol === "https:" || location.hostname === "localhost";
     const hasManifest = !!document.querySelector('link[rel="manifest"]');
-
-    // Chrome 계열 브라우저에서 기본 요구사항을 만족하는 경우에만 수동 설치 안내 제공
     const isChromeBased = /Chrome|Chromium|Edge|Samsung/.test(
       navigator.userAgent
     );
 
+    // 기본 요구사항을 만족하는 경우에만 수동 설치 안내 제공
     if (hasServiceWorker && isSecure && hasManifest && isChromeBased) {
       return { canInstall: true, type: "manual-guide" };
     }
 
+    // 설치 불가능
     return { canInstall: false, type: "not-supported" };
   };
 
@@ -83,7 +84,7 @@ export default function Home() {
       >
         {/* PWA 설치 및 알림 허용 */}
         <div className="flex flex-col gap-3 px-4">
-          {/* iOS - PWA 설치 가이드 */}
+          {/* iOS - PWA 설치 가이드 (PWA로 실행 중이 아닐 때만) */}
           {installability.canInstall &&
             installability.type === "ios-manual" && (
               <Button
@@ -95,7 +96,7 @@ export default function Home() {
               </Button>
             )}
 
-          {/* 브라우저 자동 설치 프롬프트가 있는 경우 */}
+          {/* 안드로이드 - 브라우저 자동 설치 프롬프트가 있는 경우 */}
           {installability.canInstall &&
             installability.type === "browser-prompt" && (
               <Button
@@ -107,7 +108,7 @@ export default function Home() {
               </Button>
             )}
 
-          {/* 수동 설치 안내 (PWA 요구사항을 만족하지만 자동 프롬프트가 없는 경우) */}
+          {/* 안드로이드 - 수동 설치 안내 (자동 프롬프트가 없는 경우) */}
           {installability.canInstall &&
             installability.type === "manual-guide" && (
               <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
