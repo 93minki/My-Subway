@@ -46,4 +46,31 @@ self.addEventListener("push", (event) => {
   }
 });
 
+self.addEventListener("notificationclick", (event) => {
+  try {
+    console.log("Notification 클릭됨:", event.notification);
 
+    event.notification.close();
+
+    // 앱으로 포커스 이동
+    event.waitUntil(
+      self.clients
+        .matchAll()
+        .then((clientList) => {
+          for (const client of clientList) {
+            if (client.url === "/" && "focus" in client) {
+              return client.focus();
+            }
+          }
+          if (self.clients.openWindow) {
+            return self.clients.openWindow("/");
+          }
+        })
+        .catch((error) => {
+          console.error("Notification 클릭 처리 실패:", error);
+        })
+    );
+  } catch (error) {
+    console.error("Notification 클릭 이벤트 처리 중 오류:", error);
+  }
+});
