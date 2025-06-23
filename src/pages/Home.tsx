@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import LogoutButton from "@/components/auth/LogoutButton";
 import IOSInstallGuide from "@/components/IOSInstallGuide";
 import SearchBar from "@/components/SearchBar";
 import SearchHistory from "@/components/SearchHistory";
@@ -8,13 +8,15 @@ import { Button } from "@/components/ui/button";
 import useInstallPWA from "@/hooks/useInstallPWA";
 import useNotificationPermission from "@/hooks/useNotificationPermission";
 import useServiceWorkerRegist from "@/hooks/useServiceWorkerRegist";
-import { Bell, Download } from "lucide-react";
+import useUserInfoStore from "@/stores/userInfo";
+import { Bell, Download, User } from "lucide-react";
 import { useState } from "react";
 import { isIOS, isMobileSafari, isSafari } from "react-device-detect";
 
 export default function Home() {
   const { isInstallable, showInstallPrompt } = useInstallPWA();
   const [showIOSGuide, setShowIOSGuide] = useState(false);
+  const userInfo = useUserInfoStore((state) => state.userInfo);
 
   // 실시간 알림 권한 상태 훅 사용
   const {
@@ -82,6 +84,22 @@ export default function Home() {
         id="home"
         className="flex flex-col gap-8 max-w-md w-full mx-auto pt-4 pb-8"
       >
+        {/* 사용자 헤더 영역 */}
+        <div className="flex items-center justify-between px-4 py-3 bg-white rounded-2xl shadow-sm border border-gray-200">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+              <User className="w-5 h-5 text-blue-600" />
+            </div>
+            <div className="flex flex-col">
+              <span className="font-medium text-gray-900 text-sm">
+                {userInfo.nickname}
+              </span>
+              <span className="text-xs text-gray-500">{userInfo.email}</span>
+            </div>
+          </div>
+          <LogoutButton />
+        </div>
+
         {/* PWA 설치 및 알림 허용 */}
         <div className="flex flex-col gap-3 px-4">
           {/* iOS - PWA 설치 가이드 (PWA로 실행 중이 아닐 때만) */}
