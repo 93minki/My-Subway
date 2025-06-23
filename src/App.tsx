@@ -9,8 +9,8 @@ import { WebSocketProvider } from "./provider/WebSocketProvider";
 function App() {
   return (
     <CommonLayout>
-      <WebSocketProvider>
-        <BrowserRouter>
+      <BrowserRouter>
+        <WebSocketProvider>
           <Routes>
             <Route path="/signin" element={<SigninPage />} />
             <Route path="/signup" element={<SignupPage />} />
@@ -19,8 +19,8 @@ function App() {
               {/* my-room 추가 예정 */}
             </Route>
           </Routes>
-        </BrowserRouter>
-      </WebSocketProvider>
+        </WebSocketProvider>
+      </BrowserRouter>
     </CommonLayout>
   );
 }
