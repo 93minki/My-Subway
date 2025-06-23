@@ -76,6 +76,10 @@ const SubwayLineDirection = ({
               (line) => line.arvlMsg3 === station
             );
 
+            const shouldAnimate = sortedLine.some(
+              (line) => line.arvlMsg3 === station && line.arvlCd !== "1"
+            );
+
             return (
               <div
                 key={`station-${station}-${index}`}
@@ -90,7 +94,12 @@ const SubwayLineDirection = ({
                 {hasTrainAtStation && (
                   <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2">
                     <Train
-                      className={`w-5 h-5 text-${subwayId} animate-pulse`}
+                      className={`w-5 h-5 text-${subwayId}`}
+                      style={{
+                        animation: shouldAnimate
+                          ? "moveRight 2s ease-in-out infinite"
+                          : "none",
+                      }}
                     />
                   </div>
                 )}
