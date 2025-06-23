@@ -1,6 +1,7 @@
 import { WS_ENDPOINT } from "@/constants";
 import { toast } from "@/hooks/use-toast";
 import useSearchResultStore from "@/stores/searchResult";
+import useUserInfoStore from "@/stores/userInfo";
 import React, {
   MutableRefObject,
   createContext,
@@ -8,6 +9,7 @@ import React, {
   useEffect,
   useRef,
 } from "react";
+import { useLocation } from "react-router-dom";
 
 interface WebSocketContextType {
   ws: MutableRefObject<WebSocket | null>;
@@ -23,9 +25,11 @@ export const WebSocketProvider = ({
   children: React.ReactNode;
 }) => {
   const ws = useRef<WebSocket | null>(null);
+  const location = useLocation();
   const setSearchResult = useSearchResultStore(
     (state) => state.setSearchResult
   );
+  const userInfo = useUserInfoStore((state) => state.userInfo);
 
   const initializeWebSocket = useCallback(() => {
     console.log("WebSocket 연결 시도:", WS_ENDPOINT);
@@ -33,6 +37,8 @@ export const WebSocketProvider = ({
 
     ws.current.onopen = () => {
       console.log("WebSocket 연결 성공");
+      const userId = userInfo.id;
+      ws.current?.send(JSON.stringify({ type: "init", userId }));
     };
 
     ws.current.onmessage = (event) => {
@@ -72,17 +78,32 @@ export const WebSocketProvider = ({
       console.log("WebSocket Connection Closed", event);
       ws.current = null;
     };
-  }, [setSearchResult]);
+  }, [setSearchResult, userInfo.id]);
+
+  // 로그인된 사용자이고 메인 페이지일 때만 WebSocket 연결
+  const shouldConnectWebSocket = useCallback(() => {
+    return userInfo.id && location.pathname === "/";
+  }, [userInfo.id, location.pathname]);
 
   const handleVisibilityChange = useCallback(() => {
-    if (document.visibilityState === "visible" && !ws.current) {
+    if (
+      document.visibilityState === "visible" &&
+      !ws.current &&
+      shouldConnectWebSocket()
+    ) {
       initializeWebSocket();
     }
-  }, [initializeWebSocket]);
+  }, [initializeWebSocket, shouldConnectWebSocket]);
 
   useEffect(() => {
-    if (!ws.current) {
+    // 조건을 만족할 때만 WebSocket 연결
+    if (shouldConnectWebSocket() && !ws.current) {
       initializeWebSocket();
+    }
+    // 조건을 만족하지 않을 때 기존 연결 종료
+    else if (!shouldConnectWebSocket() && ws.current) {
+      ws.current.close();
+      ws.current = null;
     }
 
     document.addEventListener("visibilitychange", handleVisibilityChange);
@@ -91,7 +112,7 @@ export const WebSocketProvider = ({
       ws.current?.close();
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, [handleVisibilityChange, initializeWebSocket]);
+  }, [handleVisibilityChange, initializeWebSocket, shouldConnectWebSocket]);
 
   return (
     <WebSocketContext.Provider value={{ ws }}>

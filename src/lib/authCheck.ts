@@ -1,4 +1,5 @@
 import { API_ENDPOINT } from "@/constants";
+import useTrackSubwayStore from "@/stores/trackSubway";
 
 type authCheckFuncProps = (result: {
   email: string;
@@ -41,6 +42,13 @@ const authCheckFunc = async (setUserInfo: authCheckFuncProps) => {
         id: userInfo.payload.user.id,
         nickname: userInfo.payload.user.nickname,
       });
+      if (userInfo.payload?.subwayNumber) {
+        useTrackSubwayStore
+          .getState()
+          .setSubwayNumber(userInfo.payload.subwayNumber);
+      } else {
+        useTrackSubwayStore.getState().resetSubwayNumber();
+      }
     }
 
     return userInfo.result === "success";
