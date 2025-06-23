@@ -13,16 +13,20 @@ interface userInfoState {
     id: string;
     nickname: string;
   }) => void;
+  resetUserInfo: () => void;
 }
 
+const initialState = {
+  email: "",
+  at: "",
+  id: "",
+  nickname: "",
+};
+
 const useUserInfoStore = create<userInfoState>()((set) => ({
-  userInfo: {
-    email: "",
-    at: "",
-    id: "",
-    nickname: "",
-  },
+  userInfo: initialState,
   setUserInfo: (result) => set({ userInfo: result }),
+  resetUserInfo: () => set({ userInfo: initialState }),
 }));
 
 export default useUserInfoStore;
