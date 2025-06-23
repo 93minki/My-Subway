@@ -1,5 +1,5 @@
 import { realTimeArrivalListType } from "@/types/ResponseType";
-import { MapPin, Train } from "lucide-react";
+import { Milestone, Train } from "lucide-react";
 import Subway from "./Subway";
 
 interface SubwayLineDirectionProps {
@@ -37,10 +37,10 @@ const SubwayLineDirection = ({
           <span className="truncate px-2">{prevStation}</span>
         </div>
         <div
-          className={`border-4 border-white w-36 h-36 rounded-full flex justify-center items-center bg-${subwayId} text-2xl font-bold shadow-lg relative z-10`}
+          className={`border-4 border-white w-36 h-36 rounded-full flex justify-center items-center bg-${subwayId} text-2xl font-bold shadow-lg relative z-20`}
         >
           <div className="text-center">
-            <MapPin className="w-6 h-6 mx-auto mb-1" />
+            <Milestone className="w-6 h-6 mx-auto mb-1" />
             <span className="block text-base leading-tight">{stationName}</span>
           </div>
         </div>
