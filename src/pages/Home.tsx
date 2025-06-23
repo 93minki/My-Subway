@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import useInstallPWA from "@/hooks/useInstallPWA";
 import useNotificationPermission from "@/hooks/useNotificationPermission";
 import useServiceWorkerRegist from "@/hooks/useServiceWorkerRegist";
+import useTrackSubwayStore from "@/stores/trackSubway";
 import useUserInfoStore from "@/stores/userInfo";
 import { Bell, Download, User } from "lucide-react";
 import { useState } from "react";
@@ -17,6 +18,7 @@ export default function Home() {
   const { isInstallable, showInstallPrompt } = useInstallPWA();
   const [showIOSGuide, setShowIOSGuide] = useState(false);
   const userInfo = useUserInfoStore((state) => state.userInfo);
+  const subwayNumber = useTrackSubwayStore((state) => state.subwayNumber);
 
   // 실시간 알림 권한 상태 훅 사용
   const {
@@ -85,19 +87,46 @@ export default function Home() {
         className="flex flex-col gap-8 max-w-md w-full mx-auto pt-4 pb-8"
       >
         {/* 사용자 헤더 영역 */}
-        <div className="flex items-center justify-between px-4 py-3 bg-white rounded-2xl shadow-sm border border-gray-200">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-              <User className="w-5 h-5 text-blue-600" />
+        <div
+          className={`relative ${
+            subwayNumber
+              ? "bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 p-[2px] rounded-2xl shadow-lg"
+              : ""
+          }`}
+        >
+          <div
+            className={`flex items-center justify-between px-4 py-3 bg-white rounded-2xl ${
+              subwayNumber ? "rounded-2xl" : "shadow-sm border border-gray-200"
+            }`}
+          >
+            <div className="flex items-center gap-3">
+              <div className="relative">
+                <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                  <User className="w-5 h-5 text-blue-600" />
+                </div>
+                {/* 추적 중일 때 표시기 - 더 크게 */}
+                {subwayNumber && (
+                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white shadow-md animate-pulse" />
+                )}
+              </div>
+              <div className="flex flex-col">
+                <span className="font-medium text-gray-900 text-sm">
+                  {userInfo.nickname}
+                </span>
+                <span className="text-xs text-gray-500">{userInfo.email}</span>
+                {/* 추적 상태 표시 */}
+                {subwayNumber && (
+                  <div className="flex items-center gap-1.5 mt-0.5">
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                    <span className="text-xs text-green-600 font-medium">
+                      추적중인 지하철이 있습니다.
+                    </span>
+                  </div>
+                )}
+              </div>
             </div>
-            <div className="flex flex-col">
-              <span className="font-medium text-gray-900 text-sm">
-                {userInfo.nickname}
-              </span>
-              <span className="text-xs text-gray-500">{userInfo.email}</span>
-            </div>
+            <LogoutButton />
           </div>
-          <LogoutButton />
         </div>
 
         {/* PWA 설치 및 알림 허용 */}
