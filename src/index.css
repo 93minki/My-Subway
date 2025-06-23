@@ -162,3 +162,13 @@
 .slide-in {
   animation: slideIn 0.3s ease-out;
 }
+
+/* 우측 이동 애니메이션 */
+@keyframes moveRight {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(20px);
+  }
+}

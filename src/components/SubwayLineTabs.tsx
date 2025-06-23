@@ -87,7 +87,11 @@ const SubwayLineTabs = () => {
   }
 
   return (
-    <Tabs defaultValue={currentTab} className="flex flex-col w-full">
+    <Tabs
+      value={currentTab}
+      onValueChange={setCurrentTab}
+      className="flex flex-col w-full"
+    >
       <div className="px-4 mb-6">
         <TabsList className="flex w-full h-auto bg-gray-100 p-1 rounded-2xl overflow-x-auto scrollbar-hide">
           <div className="flex gap-1 min-w-full">
