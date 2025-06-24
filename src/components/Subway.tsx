@@ -122,6 +122,11 @@ const Subway = ({ subwayInfo }: SubwayProps) => {
                     : `bg-${subwayInfo.subwayId} hover:bg-${subwayInfo.subwayId}/90 text-white`
                 }
               `}
+              disabled={
+                subwayInfo.arvlCd === "0" ||
+                subwayInfo.arvlCd === "1" ||
+                subwayInfo.arvlCd === "2"
+              }
             >
               {isSubwaySelected ? (
                 <>
