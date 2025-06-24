@@ -1,6 +1,7 @@
 import { WS_ENDPOINT } from "@/constants";
 import { toast } from "@/hooks/use-toast";
 import useSearchResultStore from "@/stores/searchResult";
+import useTrackSubwayStore from "@/stores/trackSubway";
 import useUserInfoStore from "@/stores/userInfo";
 import React, {
   MutableRefObject,
@@ -67,6 +68,19 @@ export const WebSocketProvider = ({
           title: "추적 중단",
           description: "선택하신 지하철의 실시간 위치 추적을 중단했습니다.",
         });
+      } else if (type === "tracking_completed") {
+        toast({
+          title: "추적 완료",
+          description: "선택하신 지하철의 실시간 위치 추적을 완료했습니다.",
+        });
+        useTrackSubwayStore.getState().resetSubwayNumber();
+      } else if (type === "tracking_status") {
+        toast({
+          title: "추적 상태 업데이트",
+          description:
+            "선택하신 지하철의 실시간 위치 추적 상태를 업데이트했습니다.",
+        });
+        useTrackSubwayStore.getState().setSubwayNumber(data.subwayNumber);
       }
     };
 
