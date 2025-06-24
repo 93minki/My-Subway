@@ -80,7 +80,11 @@ export const WebSocketProvider = ({
           description:
             "선택하신 지하철의 실시간 위치 추적 상태를 업데이트했습니다.",
         });
-        useTrackSubwayStore.getState().setSubwayNumber(data.subwayNumber);
+        if (data.subwayNumber && data.stationName) {
+          useTrackSubwayStore.getState().setSubwayNumber(data.subwayNumber);
+        } else {
+          useTrackSubwayStore.getState().resetSubwayNumber();
+        }
       }
     };
 
