@@ -4,7 +4,11 @@
 
 지하철역 이름을 사용해서 현재 지하철의 실시간 위치를 확인할 수 있는 PWA 기반 웹앱입니다.
 
+## 🔗 관련 프로젝트
+**백엔드**: [my-subway-server](https://github.com/93minki/my-subway-server) - Node.js + Express 기반 실시간 서버
+
 ---
+
 
 ## 개요
 
@@ -44,11 +48,17 @@
 
 ## 기술 스택
 
-- **Frontend**: React 18, Vite, TypeScript, Zustand, TailwindCSS, Shadcn/ui, React Hook Form, Zod
+### Frontend (현재 레포)
+
+- **Framework**: React 18, Vite, TypeScript
+- **상태관리**: Zustand
+- **스타일링**: TailwindCSS, Shadcn/ui
+- **폼관리**: React Hook Form, Zod
 - **PWA**: VitePWA, Service Worker, Web Push
 - **테스트**: Jest, Testing Library, MSW(Mock Service Worker)
 - **문서화**: Storybook
 - **기타**: React Router, Lucide-react(아이콘), Radix UI
+
 
 ---
 
@@ -63,21 +73,6 @@ npm run dev
 
 # 빌드
 npm run build
-
-# 빌드 결과물 프리뷰
-npm run preview
-
-# 린트 검사
-npm run lint
-
-# 테스트(Jest)
-npm run test
-
-# Storybook 실행
-npm run storybook
-
-# Storybook 빌드
-npm run build-storybook
 ```
 
 ---
@@ -85,8 +80,12 @@ npm run build-storybook
 ## 환경 변수
 
 - `.env` 파일에 다음과 같은 변수를 설정해야 합니다.
+
   - `VITE_WS_ENDPOINT` : 실시간 WebSocket 서버 주소
-  - (필요시) API 서버 주소 등
+  - `VITE_API_ENDPOINT` : REST API 서버 주소
+  - `VITE_VAPID_PUBLIC_KEY` : 웹 푸시 알림을 위한 VAPID 공개키
+
+- 백엔드 서버 환경 변수는 [백엔드 레포](https://github.com/93minki/my-subway-server)를 참고하세요.
 
 ---
 
